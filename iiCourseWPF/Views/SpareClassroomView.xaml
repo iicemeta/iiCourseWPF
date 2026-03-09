@@ -6,50 +6,82 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
-        <!-- 教室卡片样式 -->
-        <Style x:Key="ClassroomCardStyle" TargetType="Border">
+        <!-- 课时标签样式 -->
+        <Style x:Key="PeriodTagStyle" TargetType="Border">
+            <Setter Property="Background" Value="#E8F5E9"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        
+        <!-- 课时筛选按钮样式 - 紧凑版 -->
+        <Style x:Key="PeriodFilterButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="MinWidth" Value="60"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 课时行样式 -->
+        <Style x:Key="PeriodRowStyle" TargetType="Border">
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="16"/>
-            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Color="#FF6B35" Opacity="0.06" BlurRadius="10" ShadowDepth="1"/>
+                    <DropShadowEffect Color="#FF6B35" Opacity="0.04" BlurRadius="8" ShadowDepth="1"/>
                 </Setter.Value>
             </Setter>
         </Style>
     </UserControl.Resources>
 
     <Grid Background="#FFF8F0">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel MaxWidth="1200" HorizontalAlignment="Stretch">
                 <!-- 头部标题 -->
                 <Border Style="{StaticResource PageHeaderStyle}">
                     <StackPanel>
                         <TextBlock Text="空教室查询" FontSize="26" FontWeight="Bold" 
                                   Foreground="White" Margin="0,0,0,6"/>
-                        <TextBlock Text="查找可用的空闲教室" FontSize="13" 
+                        <TextBlock Text="按课时查找空闲教室" FontSize="13" 
                                   Foreground="#D9FFFFFF"/>
                     </StackPanel>
                 </Border>
 
                 <!-- 查询控制区 -->
-                <Border Style="{StaticResource CardBorderStyle}" Margin="24,24,24,12">
+                <Border Style="{StaticResource CardBorderStyle}" Margin="16,16,16,8">
                     <StackPanel>
                         <!-- 校区选择 -->
                         <TextBlock Text="选择校区" FontSize="14" FontWeight="SemiBold" 
-                                  Foreground="#2C3E50" Margin="0,0,0,12"/>
+                                  Foreground="#2C3E50" Margin="0,0,0,10"/>
                         
-                        <WrapPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <WrapPanel Orientation="Horizontal" Margin="0,0,0,16">
                             <Button x:Name="EastCampusButton" 
                                     Style="{StaticResource SecondaryButtonStyle}"
-                                    Padding="20,10" FontSize="13"
+                                    Padding="16,8" FontSize="13"
                                     Click="OnCampusClick" Tag="1"
-                                    Margin="0,0,10,10">
+                                    Margin="0,0,8,8">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <Path Width="16" Height="16" Data="{StaticResource SchoolIcon}"
-                                              Fill="#FF6B35" Stretch="Uniform" Margin="0,0,8,0"
+                                        <Path Width="14" Height="14" Data="{StaticResource SchoolIcon}"
+                                              Fill="#FF6B35" Stretch="Uniform" Margin="0,0,6,0"
                                               VerticalAlignment="Center"/>
                                         <TextBlock Text="东校区" VerticalAlignment="Center"/>
                                     </StackPanel>
@@ -58,13 +90,13 @@
 
                             <Button x:Name="WestCampusButton" 
                                     Style="{StaticResource SecondaryButtonStyle}"
-                                    Padding="20,10" FontSize="13"
+                                    Padding="16,8" FontSize="13"
                                     Click="OnCampusClick" Tag="2"
-                                    Margin="0,0,10,10">
+                                    Margin="0,0,8,8">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <Path Width="16" Height="16" Data="{StaticResource SchoolIcon}"
-                                              Fill="#FF6B35" Stretch="Uniform" Margin="0,0,8,0"
+                                        <Path Width="14" Height="14" Data="{StaticResource SchoolIcon}"
+                                              Fill="#FF6B35" Stretch="Uniform" Margin="0,0,6,0"
                                               VerticalAlignment="Center"/>
                                         <TextBlock Text="西校区" VerticalAlignment="Center"/>
                                     </StackPanel>
@@ -74,7 +106,7 @@
 
                         <!-- 教学楼选择 -->
                         <TextBlock Text="选择教学楼" FontSize="14" FontWeight="SemiBold" 
-                                  Foreground="#2C3E50" Margin="0,0,0,12"/>
+                                  Foreground="#2C3E50" Margin="0,0,0,10"/>
 
                         <WrapPanel x:Name="BuildingButtonsPanel" Orientation="Horizontal">
                             <!-- 教学楼按钮将在这里动态生成 -->
@@ -82,21 +114,53 @@
 
                         <TextBlock x:Name="StatusText" Text="" 
                                   FontSize="13" Foreground="#7F8C8D" 
-                                  Margin="0,16,0,0"/>
+                                  Margin="0,12,0,0"/>
                     </StackPanel>
                 </Border>
 
-                <!-- 空教室列表 -->
-                <Border Style="{StaticResource CardBorderStyle}" Margin="24,12,24,24">
-                    <StackPanel>
-                        <TextBlock Text="空教室列表" FontSize="16" FontWeight="SemiBold" 
-                                  Foreground="#2C3E50" Margin="0,0,0,16"/>
+                <!-- 课时筛选区 -->
+                <Border x:Name="PeriodFilterPanel" Style="{StaticResource CardBorderStyle}" 
+                        Margin="16,8,16,8" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Text="快速筛选：你什么时候有空？" 
+                                  FontSize="14" FontWeight="SemiBold" 
+                                  Foreground="#2C3E50" Margin="0,0,0,8"/>
+                        <TextBlock Grid.Row="1" Text="点击你空闲的课时，查看该时段所有空教室" 
+                                  FontSize="11" Foreground="#7F8C8D" Margin="0,0,0,10"/>
+                        
+                        <!-- 使用UniformGrid实现响应式布局 -->
+                        <UniformGrid x:Name="PeriodFilterButtons" Grid.Row="2" 
+                                    Columns="6" HorizontalAlignment="Stretch">
+                            <!-- 课时筛选按钮动态生成 -->
+                        </UniformGrid>
+                    </Grid>
+                </Border>
 
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
-                            <WrapPanel x:Name="ClassroomPanel">
-                                <!-- 空教室卡片将在这里动态生成 -->
-                                <Border Style="{StaticResource ClassroomCardStyle}" 
-                                        Background="#FFF8F0" Width="200">
+                <!-- 空教室列表 - 按课时分组 -->
+                <Border Style="{StaticResource CardBorderStyle}" Margin="16,8,16,16">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="空闲教室列表" FontSize="16" FontWeight="SemiBold" 
+                                      Foreground="#2C3E50" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ResultCountText" Grid.Column="1" Text="" 
+                                      FontSize="13" Foreground="#7F8C8D" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500" 
+                                     HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel x:Name="ClassroomByPeriodPanel">
+                                <!-- 按课时分组的内容将在这里动态生成 -->
+                                <Border Style="{StaticResource PeriodRowStyle}" Background="#FFF8F0">
                                     <StackPanel>
                                         <Path Width="36" Height="36" Data="{StaticResource RoomIcon}"
                                               Fill="#7F8C8D" Stretch="Uniform" Margin="0,0,0,12"
@@ -106,7 +170,7 @@
                                                   TextAlignment="Center" TextWrapping="Wrap"/>
                                     </StackPanel>
                                 </Border>
-                            </WrapPanel>
+                            </StackPanel>
                         </ScrollViewer>
                     </StackPanel>
                 </Border>

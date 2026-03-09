@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using iisdtbu;
@@ -12,7 +13,7 @@ using iisdtbu.Models;
 namespace iiCourseWPF.Views
 {
     /// <summary>
-    /// 空教室查询视图
+    /// 空教室查询视图 - 按课时维度展示
     /// </summary>
     public partial class SpareClassroomView : UserControl
     {
@@ -21,6 +22,24 @@ namespace iiCourseWPF.Views
         private List<BuildingInfo> _buildings = new();
         private Button? _currentCampusButton;
         private Button? _currentBuildingButton;
+        private string? _selectedPeriod; // 当前选中的课时筛选
+
+        // 课时名称映射
+        private readonly Dictionary<string, string> _periodNames = new()
+        {
+            ["1"] = "第1节 (08:00-08:45)",
+            ["2"] = "第2节 (08:50-09:35)",
+            ["3"] = "第3节 (09:55-10:40)",
+            ["4"] = "第4节 (10:45-11:30)",
+            ["5"] = "第5节 (13:30-14:15)",
+            ["6"] = "第6节 (14:20-15:05)",
+            ["7"] = "第7节 (15:25-16:10)",
+            ["8"] = "第8节 (16:15-17:00)",
+            ["9"] = "第9节 (18:30-19:15)",
+            ["10"] = "第10节 (19:20-20:05)",
+            ["11"] = "第11节 (20:10-20:55)",
+            ["12"] = "第12节 (21:00-21:45)"
+        };
 
         public SpareClassroomView()
         {
@@ -79,8 +98,8 @@ namespace iiCourseWPF.Views
                     // 动态创建教学楼按钮
                     foreach (var building in _buildings)
                     {
-                        var button = CreateBuildingButton(building);
-                        BuildingButtonsPanel.Children.Add(button);
+                        var btn = CreateBuildingButton(building);
+                        BuildingButtonsPanel.Children.Add(btn);
                     }
                     ShowStatus($"已加载 {_buildings.Count} 个教学楼");
                 }
@@ -153,6 +172,7 @@ namespace iiCourseWPF.Views
                 if (int.TryParse(tag, out int buildingId))
                 {
                     _currentBuildingButton = button;
+                    _selectedPeriod = null; // 重置课时筛选
                     await LoadSpareClassroomsAsync(buildingId);
                     UpdateBuildingButtonStates(button);
                 }
@@ -179,12 +199,16 @@ namespace iiCourseWPF.Views
 
                 if (_classrooms.Any())
                 {
-                    DisplayClassrooms();
-                    ShowStatus($"共找到 {_classrooms.Count} 个空教室");
+                    // 生成课时筛选按钮
+                    GeneratePeriodFilterButtons();
+                    // 显示按课时分组的结果
+                    DisplayClassroomsByPeriod();
+                    ShowStatus($"共找到 {_classrooms.Count} 个空闲时段");
                 }
                 else
                 {
                     ShowEmptyState();
+                    PeriodFilterPanel.Visibility = Visibility.Collapsed;
                     ShowStatus("暂无空教室");
                 }
             }
@@ -192,6 +216,7 @@ namespace iiCourseWPF.Views
             {
                 ShowStatus($"查询失败: {ex.Message}");
                 ShowEmptyState();
+                PeriodFilterPanel.Visibility = Visibility.Collapsed;
             }
             finally
             {
@@ -200,90 +225,276 @@ namespace iiCourseWPF.Views
         }
 
         /// <summary>
-        /// 显示空教室列表
+        /// 生成课时筛选按钮
         /// </summary>
-        private void DisplayClassrooms()
+        private void GeneratePeriodFilterButtons()
         {
-            ClassroomPanel.Children.Clear();
+            PeriodFilterButtons.Children.Clear();
+            PeriodFilterPanel.Visibility = Visibility.Visible;
 
-            // 按教室名称分组
-            var groupedClassrooms = _classrooms
-                .GroupBy(c => c.教室名称)
-                .OrderBy(g => g.Key);
+            // 获取所有可用的课时
+            var availablePeriods = _classrooms
+                .Select(c => c.节次)
+                .Distinct()
+                .OrderBy(p => int.TryParse(p, out var n) ? n : 999)
+                .ToList();
 
-            foreach (var group in groupedClassrooms)
+            // 添加"全部"按钮
+            var allButton = CreatePeriodFilterButton("全部", null, true);
+            PeriodFilterButtons.Children.Add(allButton);
+
+            foreach (var period in availablePeriods)
             {
-                var card = CreateClassroomCard(group.Key, group.ToList());
-                ClassroomPanel.Children.Add(card);
+                var btn = CreatePeriodFilterButton(period, period, false);
+                PeriodFilterButtons.Children.Add(btn);
             }
         }
 
         /// <summary>
-        /// 创建教室卡片
+        /// 创建课时筛选按钮 - 使用紧凑样式
         /// </summary>
-        private Border CreateClassroomCard(string classroomName, List<SpareClassroom> classrooms)
+        private Button CreatePeriodFilterButton(string displayText, string? periodValue, bool isActive)
+        {
+            var button = new Button
+            {
+                Style = FindResource("PeriodFilterButtonStyle") as Style,
+                Tag = periodValue,
+                Margin = new Thickness(3)
+            };
+
+            // 获取课时显示文本 - 简化为只显示节次
+            string buttonText = displayText;
+            if (periodValue != null)
+            {
+                buttonText = $"第{periodValue}节";
+            }
+
+            button.Content = new TextBlock
+            {
+                Text = buttonText,
+                FontSize = 12,
+                TextTrimming = TextTrimming.CharacterEllipsis
+            };
+
+            // 设置初始状态
+            if (isActive)
+            {
+                SetPeriodButtonActive(button);
+            }
+
+            button.Click += OnPeriodFilterClick;
+            return button;
+        }
+
+        /// <summary>
+        /// 课时筛选按钮点击事件
+        /// </summary>
+        private void OnPeriodFilterClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                _selectedPeriod = button.Tag as string;
+
+                // 更新所有课时按钮状态
+                foreach (var child in PeriodFilterButtons.Children)
+                {
+                    if (child is Button btn)
+                    {
+                        if (btn == button)
+                        {
+                            SetPeriodButtonActive(btn);
+                        }
+                        else
+                        {
+                            SetPeriodButtonInactive(btn);
+                        }
+                    }
+                }
+
+                // 刷新显示
+                DisplayClassroomsByPeriod();
+            }
+        }
+
+        /// <summary>
+        /// 设置课时按钮为激活状态
+        /// </summary>
+        private void SetPeriodButtonActive(Button button)
+        {
+            button.Background = new SolidColorBrush(Color.FromRgb(255, 107, 53));
+            button.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 107, 53));
+            (button.Content as TextBlock)!.Foreground = Brushes.White;
+        }
+
+        /// <summary>
+        /// 设置课时按钮为非激活状态
+        /// </summary>
+        private void SetPeriodButtonInactive(Button button)
+        {
+            button.Background = Brushes.White;
+            button.BorderBrush = new SolidColorBrush(Color.FromRgb(224, 224, 224));
+            (button.Content as TextBlock)!.Foreground = new SolidColorBrush(Color.FromRgb(51, 51, 51));
+        }
+
+        /// <summary>
+        /// 按课时分组显示空教室
+        /// </summary>
+        private void DisplayClassroomsByPeriod()
+        {
+            ClassroomByPeriodPanel.Children.Clear();
+
+            // 筛选数据
+            var filteredClassrooms = _selectedPeriod == null
+                ? _classrooms
+                : _classrooms.Where(c => c.节次 == _selectedPeriod).ToList();
+
+            // 按课时分组
+            var groupedByPeriod = filteredClassrooms
+                .GroupBy(c => c.节次)
+                .OrderBy(g => int.TryParse(g.Key, out var n) ? n : 999);
+
+            int totalCount = 0;
+
+            foreach (var periodGroup in groupedByPeriod)
+            {
+                var periodRow = CreatePeriodRow(periodGroup.Key, periodGroup.ToList());
+                ClassroomByPeriodPanel.Children.Add(periodRow);
+                totalCount += periodGroup.Count();
+            }
+
+            // 更新结果计数
+            ResultCountText.Text = _selectedPeriod == null
+                ? $"共 {totalCount} 个空闲时段"
+                : $"第{_selectedPeriod}节 共 {totalCount} 个教室";
+        }
+
+        /// <summary>
+        /// 创建课时行
+        /// </summary>
+        private Border CreatePeriodRow(string period, List<SpareClassroom> classrooms)
         {
             var border = new Border
             {
-                Style = Resources["CardStyle"] as Style,
-                Width = 200
+                Style = Resources["PeriodRowStyle"] as Style,
+                Background = Brushes.White
             };
 
-            var stackPanel = new StackPanel();
+            var mainStack = new StackPanel();
 
-            // 教室图标
-            var icon = new TextBlock
+            // 课时标题行
+            var headerGrid = new Grid();
+            headerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            headerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            headerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            // 课时标签
+            var periodBadge = new Border
             {
-                Text = "🏫",
-                FontSize = 32,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 10)
+                Background = new SolidColorBrush(Color.FromRgb(255, 107, 53)),
+                CornerRadius = new CornerRadius(6),
+                Padding = new Thickness(12, 6, 12, 6),
+                Margin = new Thickness(0, 0, 12, 0)
             };
 
-            // 教室名称
-            var nameText = new TextBlock
+            string periodDisplay = _periodNames.TryGetValue(period, out var name) ? name : $"第{period}节";
+            var periodText = new TextBlock
             {
-                Text = classroomName,
+                Text = periodDisplay,
                 FontSize = 14,
                 FontWeight = FontWeights.SemiBold,
-                Foreground = new SolidColorBrush(Color.FromRgb(51, 51, 51)),
-                TextAlignment = TextAlignment.Center,
-                TextWrapping = TextWrapping.Wrap,
-                Margin = new Thickness(0, 0, 0, 8)
+                Foreground = Brushes.White
+            };
+            periodBadge.Child = periodText;
+            Grid.SetColumn(periodBadge, 0);
+
+            // 分隔线
+            var separator = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(240, 240, 240)),
+                Height = 1,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(separator, 1);
+
+            // 教室数量
+            var countText = new TextBlock
+            {
+                Text = $"{classrooms.Count} 间空教室",
+                FontSize = 13,
+                Foreground = new SolidColorBrush(Color.FromRgb(127, 140, 141)),
+                Margin = new Thickness(12, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(countText, 2);
+
+            headerGrid.Children.Add(periodBadge);
+            headerGrid.Children.Add(separator);
+            headerGrid.Children.Add(countText);
+
+            mainStack.Children.Add(headerGrid);
+
+            // 教室列表 - 使用UniformGrid实现响应式布局
+            var classroomGrid = new UniformGrid
+            {
+                Columns = 4,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Margin = new Thickness(0, 12, 0, 0)
             };
 
-            // 教学楼
-            var buildingText = new TextBlock
+            // 按教学楼分组显示教室
+            var byBuilding = classrooms
+                .GroupBy(c => c.教学楼)
+                .OrderBy(g => g.Key);
+
+            foreach (var buildingGroup in byBuilding)
             {
-                Text = classrooms.First().教学楼,
+                foreach (var classroom in buildingGroup.OrderBy(c => c.教室名称))
+                {
+                    var classroomTag = CreateClassroomTag(classroom);
+                    classroomGrid.Children.Add(classroomTag);
+                }
+            }
+
+            mainStack.Children.Add(classroomGrid);
+            border.Child = mainStack;
+
+            return border;
+        }
+
+        /// <summary>
+        /// 创建教室标签 - 响应式布局
+        /// </summary>
+        private Border CreateClassroomTag(SpareClassroom classroom)
+        {
+            var border = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(232, 245, 233)),
+                CornerRadius = new CornerRadius(6),
+                Padding = new Thickness(8, 6, 8, 6),
+                Margin = new Thickness(4),
+                BorderBrush = new SolidColorBrush(Color.FromRgb(200, 230, 201)),
+                BorderThickness = new Thickness(1),
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+
+            var tooltip = new ToolTip
+            {
+                Content = $"{classroom.教学楼}\n{classroom.教室名称}"
+            };
+            border.ToolTip = tooltip;
+
+            var text = new TextBlock
+            {
+                Text = classroom.教室名称,
                 FontSize = 12,
-                Foreground = new SolidColorBrush(Color.FromRgb(136, 136, 136)),
+                FontWeight = FontWeights.Medium,
+                Foreground = new SolidColorBrush(Color.FromRgb(45, 90, 61)),
                 TextAlignment = TextAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 8)
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                TextWrapping = TextWrapping.NoWrap
             };
 
-            // 可用节次
-            var periods = classrooms
-                .Select(c => c.节次)
-                .Distinct()
-                .OrderBy(p => int.TryParse(p, out var n) ? n : 0)
-                .ToList();
-
-            var periodsText = new TextBlock
-            {
-                Text = $"可用节次: {string.Join(", ", periods)}",
-                FontSize = 11,
-                Foreground = new SolidColorBrush(Color.FromRgb(76, 175, 80)),
-                TextAlignment = TextAlignment.Center,
-                TextWrapping = TextWrapping.Wrap
-            };
-
-            stackPanel.Children.Add(icon);
-            stackPanel.Children.Add(nameText);
-            stackPanel.Children.Add(buildingText);
-            stackPanel.Children.Add(periodsText);
-
-            border.Child = stackPanel;
+            border.Child = text;
             return border;
         }
 
@@ -292,13 +503,13 @@ namespace iiCourseWPF.Views
         /// </summary>
         private void ShowEmptyState()
         {
-            ClassroomPanel.Children.Clear();
+            ClassroomByPeriodPanel.Children.Clear();
+            ResultCountText.Text = "";
 
-            var emptyCard = new Border
+            var emptyBorder = new Border
             {
-                Style = Resources["CardStyle"] as Style,
-                Background = new SolidColorBrush(Color.FromRgb(249, 249, 249)),
-                Width = 200
+                Style = Resources["PeriodRowStyle"] as Style,
+                Background = new SolidColorBrush(Color.FromRgb(249, 249, 249))
             };
 
             var stackPanel = new StackPanel();
@@ -314,17 +525,16 @@ namespace iiCourseWPF.Views
             var text = new TextBlock
             {
                 Text = "暂无空教室",
-                FontSize = 12,
+                FontSize = 14,
                 Foreground = new SolidColorBrush(Color.FromRgb(136, 136, 136)),
-                TextAlignment = TextAlignment.Center,
-                TextWrapping = TextWrapping.Wrap
+                TextAlignment = TextAlignment.Center
             };
 
             stackPanel.Children.Add(icon);
             stackPanel.Children.Add(text);
 
-            emptyCard.Child = stackPanel;
-            ClassroomPanel.Children.Add(emptyCard);
+            emptyBorder.Child = stackPanel;
+            ClassroomByPeriodPanel.Children.Add(emptyBorder);
         }
 
         /// <summary>
@@ -332,11 +542,8 @@ namespace iiCourseWPF.Views
         /// </summary>
         private void UpdateCampusButtonStates(Button activeButton)
         {
-            // 重置所有校区按钮
             ResetButtonStyle(EastCampusButton);
             ResetButtonStyle(WestCampusButton);
-
-            // 设置激活按钮
             SetActiveButtonStyle(activeButton);
         }
 
@@ -345,7 +552,6 @@ namespace iiCourseWPF.Views
         /// </summary>
         private void UpdateBuildingButtonStates(Button activeButton)
         {
-            // 重置所有教学楼按钮
             foreach (var child in BuildingButtonsPanel.Children)
             {
                 if (child is Button button)
@@ -353,8 +559,6 @@ namespace iiCourseWPF.Views
                     ResetButtonStyle(button);
                 }
             }
-
-            // 设置激活按钮
             SetActiveButtonStyle(activeButton);
         }
 
