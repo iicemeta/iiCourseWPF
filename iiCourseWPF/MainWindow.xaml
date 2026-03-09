@@ -10,7 +10,8 @@
         Title="iiCourse" 
         Height="700" Width="1200" 
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BackgroundColor}">
+        Background="{StaticResource BackgroundColor}"
+        Icon="Resources/iiCourse.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
