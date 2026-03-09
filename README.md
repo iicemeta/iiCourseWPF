@@ -31,7 +31,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/iiCourseWPF.git
+git clone https://github.com/iicemeta/iiCourseWPF.git
 
 # 进入项目目录
 cd iiCourseWPF
@@ -118,8 +118,8 @@ iiCourseWPF/
 
 <div align="center">
 
-Made with 💻 by SDTBU Students
+Made with 💻 by AiScReam
 
-[🌟 Star 一下](https://github.com/yourusername/iiCourseWPF) | [🐛 提交问题](../../issues) | [💡 功能建议](../../discussions)
+[🌟 Star 一下](https://github.com/iicemeta/iiCourseWPF) | [🐛 提交问题](../../issues) | [💡 功能建议](../../discussions)
 
 </div>
