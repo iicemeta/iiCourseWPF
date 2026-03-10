@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!--
+        Fluent UI System Icons
+        使用 Unicode 字符作为图标
+        这些字符需要配合图标字体使用
+    -->
+
+    <!-- 用户相关 -->
+    <x:String x:Key="IconUser">&#xE77B;</x:String>
+    <x:String x:Key="IconUserFilled">&#xE77C;</x:String>
+    <x:String x:Key="IconPerson">&#xE77B;</x:String>
+    <x:String x:Key="IconPersonFilled">&#xE77C;</x:String>
+
+    <!-- 日历/时间 -->
+    <x:String x:Key="IconCalendar">&#xE787;</x:String>
+    <x:String x:Key="IconCalendarFilled">&#xE788;</x:String>
+    <x:String x:Key="IconClock">&#xE793;</x:String>
+    <x:String x:Key="IconClockFilled">&#xE794;</x:String>
+
+    <!-- 图表/数据 -->
+    <x:String x:Key="IconChart">&#xE7B3;</x:String>
+    <x:String x:Key="IconChartFilled">&#xE7B4;</x:String>
+    <x:String x:Key="IconData">&#xE7B5;</x:String>
+
+    <!-- 建筑/学校 -->
+    <x:String x:Key="IconBuilding">&#xE7B7;</x:String>
+    <x:String x:Key="IconBuildingFilled">&#xE7B8;</x:String>
+    <x:String x:Key="IconSchool">&#xE7B9;</x:String>
+    <x:String x:Key="IconHome">&#xE7BA;</x:String>
+
+    <!-- 卡片/支付 -->
+    <x:String x:Key="IconCard">&#xE7BB;</x:String>
+    <x:String x:Key="IconCardFilled">&#xE7BC;</x:String>
+    <x:String x:Key="IconCreditCard">&#xE7BD;</x:String>
+    <x:String x:Key="IconMoney">&#xE7BE;</x:String>
+
+    <!-- 星星/评价 -->
+    <x:String x:Key="IconStar">&#xE7BF;</x:String>
+    <x:String x:Key="IconStarFilled">&#xE7C0;</x:String>
+    <x:String x:Key="IconStarHalf">&#xE7C1;</x:String>
+
+    <!-- 设置 -->
+    <x:String x:Key="IconSettings">&#xE7C2;</x:String>
+    <x:String x:Key="IconSettingsFilled">&#xE7C3;</x:String>
+    <x:String x:Key="IconGear">&#xE7C4;</x:String>
+
+    <!-- 安全/隐私 -->
+    <x:String x:Key="IconShield">&#xE7C5;</x:String>
+    <x:String x:Key="IconShieldFilled">&#xE7C6;</x:String>
+    <x:String x:Key="IconLock">&#xE7C7;</x:String>
+    <x:String x:Key="IconLockFilled">&#xE7C8;</x:String>
+
+    <!-- 操作图标 -->
+    <x:String x:Key="IconRefresh">&#xE7C9;</x:String>
+    <x:String x:Key="IconRefreshFilled">&#xE7CA;</x:String>
+    <x:String x:Key="IconReload">&#xE7CB;</x:String>
+    <x:String x:Key="IconSearch">&#xE7CC;</x:String>
+    <x:String x:Key="IconSearchFilled">&#xE7CD;</x:String>
+
+    <!-- 导航 -->
+    <x:String x:Key="IconArrowLeft">&#xE7CE;</x:String>
+    <x:String x:Key="IconArrowRight">&#xE7CF;</x:String>
+    <x:String x:Key="IconArrowUp">&#xE7D0;</x:String>
+    <x:String x:Key="IconArrowDown">&#xE7D1;</x:String>
+    <x:String x:Key="IconChevronLeft">&#xE7D2;</x:String>
+    <x:String x:Key="IconChevronRight">&#xE7D3;</x:String>
+
+    <!-- 状态 -->
+    <x:String x:Key="IconCheck">&#xE7D4;</x:String>
+    <x:String x:Key="IconCheckFilled">&#xE7D5;</x:String>
+    <x:String x:Key="IconCheckCircle">&#xE7D6;</x:String>
+    <x:String x:Key="IconError">&#xE7D7;</x:String>
+    <x:String x:Key="IconErrorFilled">&#xE7D8;</x:String>
+    <x:String x:Key="IconWarning">&#xE7D9;</x:String>
+    <x:String x:Key="IconWarningFilled">&#xE7DA;</x:String>
+    <x:String x:Key="IconInfo">&#xE7DB;</x:String>
+    <x:String x:Key="IconInfoFilled">&#xE7DC;</x:String>
+
+    <!-- 眼睛/查看 -->
+    <x:String x:Key="IconEye">&#xE7DD;</x:String>
+    <x:String x:Key="IconEyeFilled">&#xE7DE;</x:String>
+    <x:String x:Key="IconEyeOff">&#xE7DF;</x:String>
+
+    <!-- 菜单 -->
+    <x:String x:Key="IconMenu">&#xE7E0;</x:String>
+    <x:String x:Key="IconMore">&#xE7E1;</x:String>
+    <x:String x:Key="IconMoreFilled">&#xE7E2;</x:String>
+
+    <!-- 登录/退出 -->
+    <x:String x:Key="IconLogin">&#xE7E3;</x:String>
+    <x:String x:Key="IconLogout">&#xE7E4;</x:String>
+
+    <!-- 编辑 -->
+    <x:String x:Key="IconEdit">&#xE7E5;</x:String>
+    <x:String x:Key="IconEditFilled">&#xE7E6;</x:String>
+    <x:String x:Key="IconDelete">&#xE7E7;</x:String>
+    <x:String x:Key="IconDeleteFilled">&#xE7E8;</x:String>
+    <x:String x:Key="IconAdd">&#xE7E9;</x:String>
+    <x:String x:Key="IconAddFilled">&#xE7EA;</x:String>
+
+    <!-- 提示/灯泡 -->
+    <x:String x:Key="IconLightbulb">&#xE7EB;</x:String>
+    <x:String x:Key="IconLightbulbFilled">&#xE7EC;</x:String>
+
+    <!-- 文档 -->
+    <x:String x:Key="IconDocument">&#xE7ED;</x:String>
+    <x:String x:Key="IconDocumentFilled">&#xE7EE;</x:String>
+
+    <!-- 帮助 -->
+    <x:String x:Key="IconHelp">&#xE7EF;</x:String>
+    <x:String x:Key="IconHelpFilled">&#xE7F0;</x:String>
+
+    <!-- 关闭 -->
+    <x:String x:Key="IconClose">&#xE7F1;</x:String>
+    <x:String x:Key="IconCloseFilled">&#xE7F2;</x:String>
+
+    <!-- 由于无法加载外部字体文件，我们使用简单的符号替代 -->
+    <!-- 实际项目中应该使用 Fluent UI System Icons 字体 -->
+
+    <!-- 简化版图标（使用 Unicode 符号） -->
+    <x:String x:Key="IconUserSimple">&#x263A;</x:String>
+    <x:String x:Key="IconCalendarSimple">&#x25A0;</x:String>
+    <x:String x:Key="IconChartSimple">&#x25A1;</x:String>
+    <x:String x:Key="IconBuildingSimple">&#x25A2;</x:String>
+    <x:String x:Key="IconCardSimple">&#x25A3;</x:String>
+    <x:String x:Key="IconStarSimple">&#x2605;</x:String>
+    <x:String x:Key="IconSettingsSimple">&#x2699;</x:String>
+    <x:String x:Key="IconShieldSimple">&#x26A0;</x:String>
+    <x:String x:Key="IconRefreshSimple">&#x27F3;</x:String>
+    <x:String x:Key="IconCheckSimple">&#x2713;</x:String>
+    <x:String x:Key="IconErrorSimple">&#x2717;</x:String>
+    <x:String x:Key="IconWarningSimple">&#x26A0;</x:String>
+    <x:String x:Key="IconInfoSimple">&#x2139;</x:String>
+    <x:String x:Key="IconEyeSimple">&#x25CF;</x:String>
+    <x:String x:Key="IconMenuSimple">&#x2630;</x:String>
+    <x:String x:Key="IconLightbulbSimple">&#x2600;</x:String>
+
+</ResourceDictionary>

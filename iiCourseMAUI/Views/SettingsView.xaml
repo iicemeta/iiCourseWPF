@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="设置"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ScrollView>
+        <StackLayout Spacing="0">
+            <Border Style="{StaticResource PageHeaderStyle}">
+                <StackLayout Spacing="6">
+                    <Label Text="设置" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="应用程序设置和偏好" FontSize="13" TextColor="#D9FFFFFF"/>
+                </StackLayout>
+            </Border>
+
+            <StackLayout Padding="20" Spacing="16">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="14">
+                        <Label Text="关于" FontSize="16" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}"/>
+
+                        <StackLayout Spacing="10">
+                            <Label Text="应用名称" FontSize="11" TextColor="{StaticResource SecondaryTextColor}"/>
+                            <Label Text="iiCourse" FontSize="14" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"/>
+                        </StackLayout>
+
+                        <StackLayout Spacing="10">
+                            <Label Text="版本" FontSize="11" TextColor="{StaticResource SecondaryTextColor}"/>
+                            <Label Text="1.0.0" FontSize="14" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"/>
+                        </StackLayout>
+
+                        <StackLayout Spacing="10">
+                            <Label Text="开发者" FontSize="11" TextColor="{StaticResource SecondaryTextColor}"/>
+                            <Label Text="AiScReam (iicemeta)" FontSize="14" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="14">
+                        <Label Text="功能说明" FontSize="16" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}"/>
+
+                        <StackLayout Spacing="12">
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                                <Label Grid.Column="0"
+                                       Text="{StaticResource IconUserSimple}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource PrimaryColor}"/>
+                                <StackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="用户信息" FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextColor}"/>
+                                    <Label Text="查看您的个人信息，包括学号、姓名、性别和学院。"
+                                           FontSize="11" TextColor="{StaticResource SecondaryTextColor}"
+                                           LineBreakMode="WordWrap"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+
+                        <StackLayout Spacing="12">
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                                <Label Grid.Column="0"
+                                       Text="{StaticResource IconCalendarSimple}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource PrimaryColor}"/>
+                                <StackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="课程表" FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextColor}"/>
+                                    <Label Text="查看当前学期的课程安排，包括上课时间、地点和教师信息。"
+                                           FontSize="11" TextColor="{StaticResource SecondaryTextColor}"
+                                           LineBreakMode="WordWrap"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+
+                        <StackLayout Spacing="12">
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                                <Label Grid.Column="0"
+                                       Text="{StaticResource IconChartSimple}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource PrimaryColor}"/>
+                                <StackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="成绩查询" FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextColor}"/>
+                                    <Label Text="查询您的考试成绩，包括课程成绩、学分和绩点信息。"
+                                           FontSize="11" TextColor="{StaticResource SecondaryTextColor}"
+                                           LineBreakMode="WordWrap"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+
+                        <StackLayout Spacing="12">
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                                <Label Grid.Column="0"
+                                       Text="{StaticResource IconBuildingSimple}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource PrimaryColor}"/>
+                                <StackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="空教室查询" FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextColor}"/>
+                                    <Label Text="查找各教学楼的空闲教室，方便自习和活动安排。"
+                                           FontSize="11" TextColor="{StaticResource SecondaryTextColor}"
+                                           LineBreakMode="WordWrap"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+
+                        <StackLayout Spacing="12">
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                                <Label Grid.Column="0"
+                                       Text="{StaticResource IconCardSimple}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource PrimaryColor}"/>
+                                <StackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="一卡通信息" FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextColor}"/>
+                                    <Label Text="查看校园卡余额和消费记录。"
+                                           FontSize="11" TextColor="{StaticResource SecondaryTextColor}"
+                                           LineBreakMode="WordWrap"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+
+                        <StackLayout Spacing="12">
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                                <Label Grid.Column="0"
+                                       Text="{StaticResource IconStarSimple}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource PrimaryColor}"/>
+                                <StackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="学生评教" FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextColor}"/>
+                                    <Label Text="完成课程教学评价。"
+                                           FontSize="11" TextColor="{StaticResource SecondaryTextColor}"
+                                           LineBreakMode="WordWrap"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+                    </StackLayout>
+                </Border>
+
+                <BoxView HeightRequest="20"/>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

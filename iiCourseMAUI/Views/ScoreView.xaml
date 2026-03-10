@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.ScoreView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="成绩查询"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <StackLayout Spacing="6">
+                <Label Text="成绩查询" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                <Label Text="查看您的考试成绩" FontSize="13" TextColor="#D9FFFFFF"/>
+            </StackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="20" Spacing="16">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="16">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Button x:Name="RefreshButton" Text="刷新成绩"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Padding="16,10"
+                                    Clicked="OnRefreshClicked"/>
+                            <Label Grid.Column="1" x:Name="StatusLabel" Text=""
+                                   FontSize="13" TextColor="{StaticResource SecondaryTextColor}"
+                                   VerticalOptions="Center" Margin="12,0,0,0"/>
+                        </Grid>
+
+                        <Border BackgroundColor="White"
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="#E8E8E8">
+                            <ScrollView Orientation="Both">
+                                <Grid x:Name="ScoreGrid" RowDefinitions="Auto" ColumnDefinitions="2*, *, *, *, *, *">
+                                    <!-- 表头动态生成 -->
+                                </Grid>
+                            </ScrollView>
+                        </Border>
+                    </StackLayout>
+                </Border>
+
+                <BoxView HeightRequest="20"/>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

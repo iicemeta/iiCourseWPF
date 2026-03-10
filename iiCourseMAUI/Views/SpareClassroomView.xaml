@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.SpareClassroomView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="空教室查询"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <StackLayout Spacing="6">
+                <Label Text="空教室查询" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                <Label Text="按课时查找空闲教室" FontSize="13" TextColor="#D9FFFFFF"/>
+            </StackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="16" Spacing="12">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="14">
+                        <Label Text="选择校区" FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}"/>
+
+                        <FlexLayout Wrap="Wrap" Margin="0,0,0,8">
+                            <Button x:Name="EastCampusButton" Text="东校区"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Clicked="OnCampusClicked" CommandParameter="1" Margin="0,0,8,0"/>
+                            <Button x:Name="WestCampusButton" Text="西校区"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Clicked="OnCampusClicked" CommandParameter="2"/>
+                        </FlexLayout>
+
+                        <Label Text="选择教学楼" FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}" Margin="0,8,0,0"/>
+
+                        <FlexLayout x:Name="BuildingButtonsPanel" Wrap="Wrap"/>
+
+                        <Label x:Name="StatusLabel" Text="" FontSize="12"
+                               TextColor="{StaticResource SecondaryTextColor}" Margin="0,8,0,0"/>
+                    </StackLayout>
+                </Border>
+
+                <Border x:Name="PeriodFilterPanel" Style="{StaticResource CardBorderStyle}" IsVisible="False">
+                    <StackLayout Spacing="10">
+                        <Label Text="快速筛选：你什么时候有空？" FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}"/>
+                        <Label Text="点击你空闲的课时，查看该时段所有空教室" FontSize="11"
+                               TextColor="{StaticResource SecondaryTextColor}"/>
+                        <FlexLayout x:Name="PeriodFilterButtons" Wrap="Wrap"/>
+                    </StackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Text="空闲教室列表" FontSize="15" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}" VerticalOptions="Center"/>
+                            <Label x:Name="ResultCountLabel" Grid.Column="1" Text=""
+                                   FontSize="12" TextColor="{StaticResource SecondaryTextColor}"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+
+                        <ScrollView Orientation="Vertical" MaximumHeightRequest="450">
+                            <StackLayout x:Name="ClassroomPanel">
+                                <Border BackgroundColor="{StaticResource BackgroundColor}"
+                                        StrokeShape="RoundRectangle 8" Padding="12">
+                                    <StackLayout Spacing="10">
+                                        <Label Text="{StaticResource IconBuildingSimple}"
+                                               FontSize="32"
+                                               TextColor="{StaticResource PrimaryColor}"
+                                               HorizontalOptions="Center"/>
+                                        <Label Text="请选择教学楼查询" FontSize="12"
+                                               TextColor="{StaticResource SecondaryTextColor}"
+                                               HorizontalOptions="Center"/>
+                                    </StackLayout>
+                                </Border>
+                            </StackLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </Border>
+
+                <BoxView HeightRequest="20"/>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

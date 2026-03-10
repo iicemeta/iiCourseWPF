@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.ClassScheduleView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="课程表"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- 头部标题 -->
+        <Border Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <StackLayout Spacing="4">
+                <Label Text="课程表" FontSize="22" FontAttributes="Bold" TextColor="White"/>
+                <Label Text="查看您的课程安排" FontSize="13" TextColor="#D9FFFFFF"/>
+            </StackLayout>
+        </Border>
+
+        <!-- 主内容区 -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="16" Spacing="16">
+                <!-- 课程表卡片 -->
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="12">
+                        <!-- 操作栏 -->
+                        <Grid ColumnDefinitions="Auto, *, Auto">
+                            <Button x:Name="RefreshButton"
+                                    Text="刷新"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Padding="14,8"
+                                    FontSize="12"
+                                    Clicked="OnRefreshClicked"/>
+
+                            <Label Grid.Column="1" x:Name="StatusLabel" Text=""
+                                   FontSize="12" TextColor="{StaticResource SecondaryTextColor}"
+                                   VerticalOptions="Center" Margin="10,0,0,0"/>
+
+                            <Label Grid.Column="2" x:Name="DateRangeLabel" Text=""
+                                   FontSize="12" FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryColor}"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+
+                        <!-- 课程表网格 -->
+                        <Border BackgroundColor="White"
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="#E8E8E8">
+                            <ScrollView Orientation="Both">
+                                <Grid x:Name="ScheduleGrid"
+                                      RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                                      ColumnDefinitions="32, *, *, *, *, *, *, *"
+                                      RowSpacing="1" ColumnSpacing="1">
+
+                                    <!-- 表头 - 动态生成 -->
+                                </Grid>
+                            </ScrollView>
+                        </Border>
+                    </StackLayout>
+                </Border>
+
+                <!-- 自定义查询面板 -->
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="14">
+                        <Label Text="自定义查询" FontSize="15" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}"/>
+
+                        <!-- 查询条件 -->
+                        <Grid ColumnDefinitions="*, *, Auto" ColumnSpacing="8">
+                            <!-- 学年选择 -->
+                            <StackLayout>
+                                <Label Text="学年" FontSize="11" TextColor="#666"/>
+                                <Picker x:Name="YearPicker"
+                                        Title="请选择"
+                                        FontSize="13"
+                                        HeightRequest="38"
+                                        SelectedIndexChanged="OnQueryParamChanged"/>
+                            </StackLayout>
+
+                            <!-- 学期选择 -->
+                            <StackLayout>
+                                <Label Text="学期" FontSize="11" TextColor="#666"/>
+                                <Picker x:Name="SemesterPicker"
+                                        Title="请选择"
+                                        FontSize="13"
+                                        HeightRequest="38"
+                                        SelectedIndexChanged="OnQueryParamChanged">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>请选择</x:String>
+                                            <x:String>第一学期</x:String>
+                                            <x:String>第二学期</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </StackLayout>
+
+                            <!-- 查询按钮 -->
+                            <Button x:Name="QueryButton"
+                                    Text="查询"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Padding="14,6"
+                                    FontSize="12"
+                                    Margin="0,20,0,0"
+                                    Clicked="OnQueryClicked"/>
+                        </Grid>
+
+                        <!-- 周次选择 -->
+                        <Label Text="选择周次" FontSize="11" TextColor="#666"/>
+                        <FlexLayout x:Name="WeekButtonsPanel"
+                                    Wrap="Wrap"
+                                    JustifyContent="Start"
+                                    HorizontalOptions="Fill"/>
+                    </StackLayout>
+                </Border>
+
+                <!-- 底部间距 -->
+                <BoxView HeightRequest="20"/>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

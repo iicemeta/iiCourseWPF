@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- 允许所有 HTTP/HTTPS 连接 -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    
+    <!-- 针对教务系统域名的特殊配置 -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">sdtbu.edu.cn</domain>
+        <domain includeSubdomains="true">jwxt.sdtbu.edu.cn</domain>
+        <domain includeSubdomains="true">cas.sdtbu.edu.cn</domain>
+        <domain includeSubdomains="true">ehall.sdtbu.edu.cn</domain>
+        <domain includeSubdomains="true">wmh.sdtbu.edu.cn</domain>
+    </domain-config>
+</network-security-config>

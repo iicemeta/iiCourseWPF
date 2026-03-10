@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="登录"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid RowDefinitions="*, Auto, *">
+        <!-- 装饰性背景 -->
+        <Ellipse Grid.Row="0" Grid.RowSpan="3"
+                 WidthRequest="400" HeightRequest="400"
+                 Fill="{StaticResource PrimaryBrush}" Opacity="0.05"
+                 HorizontalOptions="Start" VerticalOptions="Start"
+                 TranslationX="-200" TranslationY="-100"/>
+
+        <Ellipse Grid.Row="0" Grid.RowSpan="3"
+                 WidthRequest="300" HeightRequest="300"
+                 Fill="#FFD23F" Opacity="0.05"
+                 HorizontalOptions="End" VerticalOptions="End"
+                 TranslationX="100" TranslationY="50"/>
+
+        <!-- 登录卡片 -->
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 16"
+                StrokeThickness="0"
+                MaximumWidthRequest="420"
+                MinimumWidthRequest="280"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Padding="32"
+                Margin="24">
+            <Border.Shadow>
+                <Shadow Brush="{StaticResource PrimaryBrush}" Offset="0,4" Radius="30" Opacity="0.12"/>
+            </Border.Shadow>
+
+            <StackLayout Spacing="20">
+                <!-- 标题区域 -->
+                <StackLayout Spacing="8">
+                    <Label Text="登录 iiCourse"
+                           FontSize="24" FontAttributes="Bold"
+                           TextColor="{StaticResource TextColor}"
+                           HorizontalOptions="Center"/>
+                    <Label Text="请输入您的学号和密码"
+                           FontSize="13"
+                           TextColor="{StaticResource SecondaryTextColor}"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <!-- 学号输入 -->
+                <StackLayout Spacing="6">
+                    <Label Text="学号" FontSize="12" FontAttributes="Bold"
+                           TextColor="{StaticResource TextColor}"/>
+                    <Border Style="{StaticResource InputContainerStyle}">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconUserSimple}"
+                                   FontSize="18"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   Margin="0,0,12,0" VerticalOptions="Center"/>
+                            <Entry Grid.Column="1" x:Name="UsernameEntry"
+                                   Placeholder="请输入学号"
+                                   FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{StaticResource TextColor}"
+                                   PlaceholderColor="{StaticResource SecondaryTextColor}"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+                </StackLayout>
+
+                <!-- 密码输入 -->
+                <StackLayout Spacing="6">
+                    <Label Text="密码" FontSize="12" FontAttributes="Bold"
+                           TextColor="{StaticResource TextColor}"/>
+                    <Border Style="{StaticResource InputContainerStyle}">
+                        <Grid ColumnDefinitions="Auto, *, Auto">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconShieldSimple}"
+                                   FontSize="18"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   Margin="0,0,12,0" VerticalOptions="Center"/>
+                            <Entry Grid.Column="1" x:Name="PasswordEntry"
+                                   Placeholder="请输入密码"
+                                   FontSize="14"
+                                   IsPassword="True"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{StaticResource TextColor}"
+                                   PlaceholderColor="{StaticResource SecondaryTextColor}"
+                                   VerticalOptions="Center"/>
+                            <Button Grid.Column="2" x:Name="TogglePasswordButton"
+                                    Text="{StaticResource IconEyeSimple}"
+                                    FontSize="14"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{StaticResource SecondaryTextColor}"
+                                    WidthRequest="36" HeightRequest="36"
+                                    Padding="0" Margin="0"
+                                    Clicked="OnTogglePasswordClicked"/>
+                        </Grid>
+                    </Border>
+                </StackLayout>
+
+                <!-- 记住密码选项 -->
+                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                    <CheckBox x:Name="RememberPasswordCheckBox"
+                              Color="{StaticResource PrimaryColor}"
+                              VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Text="记住账号密码"
+                           FontSize="12" TextColor="{StaticResource SecondaryTextColor}"
+                           VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnRememberLabelTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <!-- 登录按钮 -->
+                <Button x:Name="LoginButton"
+                        Text="登录"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Clicked="OnLoginClicked"/>
+
+                <!-- 状态信息 -->
+                <Label x:Name="StatusLabel" Text=""
+                       FontSize="12" TextColor="{StaticResource ErrorColor}"
+                       HorizontalOptions="Center"
+                       IsVisible="False"/>
+
+                <!-- 加载动画 -->
+                <StackLayout x:Name="LoadingPanel"
+                             Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             IsVisible="False"
+                             Spacing="8">
+                    <ActivityIndicator Color="{StaticResource PrimaryColor}" IsRunning="True"/>
+                    <Label Text="登录中..." FontSize="12"
+                           TextColor="{StaticResource PrimaryColor}"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+
+                <!-- 提示信息 -->
+                <Border BackgroundColor="{StaticResource BackgroundColor}"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="14,10">
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Label Grid.Column="0"
+                               Text="{StaticResource IconLightbulbSimple}"
+                               FontSize="16"
+                               TextColor="{StaticResource PrimaryColor}"
+                               VerticalOptions="Start"/>
+                        <Label Grid.Column="1"
+                               Text="请使用学校统一身份认证账号登录"
+                               FontSize="12" TextColor="{StaticResource SecondaryTextColor}"
+                               LineBreakMode="WordWrap"/>
+                    </Grid>
+                </Border>
+            </StackLayout>
+        </Border>
+    </Grid>
+
+</ContentPage>

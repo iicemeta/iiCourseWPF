@@ -1,11 +1,12 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36811.4 d17.14
+VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iiCourseWPF", "iiCourseWPF\iiCourseWPF.csproj", "{4D85B57F-6E05-4E6F-BD44-5236868C3492}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iiCourse.Core", "iiCourse.Core\iiCourse.Core.csproj", "{261354C3-784A-F512-FF90-49A28220BAC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iiCourseMAUI", "iiCourseMAUI\iiCourseMAUI.csproj", "{E0412F17-DFDE-441C-9500-F99D11E203DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +22,11 @@ Global
 		{261354C3-784A-F512-FF90-49A28220BAC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{261354C3-784A-F512-FF90-49A28220BAC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{261354C3-784A-F512-FF90-49A28220BAC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0412F17-DFDE-441C-9500-F99D11E203DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0412F17-DFDE-441C-9500-F99D11E203DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0412F17-DFDE-441C-9500-F99D11E203DC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E0412F17-DFDE-441C-9500-F99D11E203DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0412F17-DFDE-441C-9500-F99D11E203DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

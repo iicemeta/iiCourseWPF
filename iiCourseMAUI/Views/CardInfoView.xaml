@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.CardInfoView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="一卡通信息"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ScrollView>
+        <StackLayout Spacing="0">
+            <Border Style="{StaticResource PageHeaderStyle}">
+                <StackLayout Spacing="6">
+                    <Label Text="一卡通信息" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="查看您的校园卡余额和消费记录" FontSize="13" TextColor="#D9FFFFFF"/>
+                </StackLayout>
+            </Border>
+
+            <StackLayout Padding="20" Spacing="16">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                        <Border Grid.Column="0" WidthRequest="80" HeightRequest="80"
+                                StrokeShape="RoundRectangle 12">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#FF6B35" Offset="0"/>
+                                    <GradientStop Color="#FFD23F" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Label Text="{StaticResource IconCardSimple}"
+                                   FontSize="36"
+                                   TextColor="White"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+
+                        <StackLayout Grid.Column="1" Spacing="18">
+                            <Label Text="校园一卡通" FontSize="18" FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryColor}"/>
+
+                            <StackLayout>
+                                <Label Text="当前余额" Style="{StaticResource InfoLabelStyle}"/>
+                                <Label x:Name="BalanceLabel" Text="--"
+                                       FontSize="28" FontAttributes="Bold"
+                                       TextColor="{StaticResource SuccessColor}"/>
+                            </StackLayout>
+
+                            <StackLayout>
+                                <Label Text="上次消费时间" Style="{StaticResource InfoLabelStyle}"/>
+                                <Label x:Name="LastConsumeLabel" Text="--"
+                                       FontSize="14" TextColor="{StaticResource SecondaryTextColor}"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </Grid>
+                </Border>
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="12">
+                    <Button x:Name="RefreshButton" Text="刷新信息"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Clicked="OnRefreshClicked"/>
+                    <Label x:Name="StatusLabel" Text=""
+                           FontSize="12" TextColor="{StaticResource SecondaryTextColor}"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+
+                <Border BackgroundColor="{StaticResource LightGreenColor}"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="16,14">
+                    <StackLayout Spacing="8">
+                        <StackLayout Orientation="Horizontal" Spacing="6">
+                            <Label Text="{StaticResource IconLightbulbSimple}"
+                                   FontSize="13"
+                                   TextColor="{StaticResource SuccessColor}"/>
+                            <Label Text="使用提示" FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource SuccessColor}"/>
+                        </StackLayout>
+                        <Label Text="余额信息实时更新，请定期查询" FontSize="11" TextColor="#555555"/>
+                        <Label Text="如有余额异常，请及时联系校园卡管理中心" FontSize="11" TextColor="#555555"/>
+                        <Label Text="校园卡可在食堂、超市、图书馆等场所使用" FontSize="11" TextColor="#555555"/>
+                    </StackLayout>
+                </Border>
+
+                <BoxView HeightRequest="20"/>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

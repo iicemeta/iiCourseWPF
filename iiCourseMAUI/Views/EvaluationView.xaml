@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.EvaluationView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="学生评教"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <StackLayout Spacing="6">
+                <Label Text="学生评教" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                <Label Text="完成课程教学评价" FontSize="13" TextColor="#D9FFFFFF"/>
+            </StackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="20" Spacing="12">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="14">
+                        <Label Text="评教操作" FontSize="15" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}"/>
+
+                        <StackLayout Orientation="Horizontal" Spacing="10">
+                            <Button x:Name="LoadReviewsButton" Text="加载评教列表"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Clicked="OnLoadReviewsClicked"/>
+                            <Button x:Name="FinishAllButton" Text="一键完成评教"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Clicked="OnFinishAllClicked"/>
+                        </StackLayout>
+
+                        <Label x:Name="StatusLabel" Text="" FontSize="12"
+                               TextColor="{StaticResource SecondaryTextColor}" Margin="0,8,0,0"/>
+                    </StackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackLayout Spacing="14">
+                        <Label Text="评教任务" FontSize="15" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}"/>
+
+                        <ScrollView MaximumHeightRequest="380">
+                            <StackLayout x:Name="ReviewPanel">
+                                <Border BackgroundColor="{StaticResource BackgroundColor}"
+                                        StrokeShape="RoundRectangle 8" Padding="12">
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="8">
+                                        <Label Text="{StaticResource IconInfoSimple}"
+                                               FontSize="16"
+                                               TextColor="{StaticResource PrimaryColor}"
+                                               VerticalOptions="Center"/>
+                                        <Label Text="点击加载按钮查看评教任务" FontSize="12"
+                                               TextColor="{StaticResource SecondaryTextColor}"
+                                               VerticalOptions="Center"/>
+                                    </StackLayout>
+                                </Border>
+                            </StackLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </Border>
+
+                <Border BackgroundColor="{StaticResource LightYellowColor}"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeThickness="1"
+                        Padding="16,14">
+                    <StackLayout Spacing="8">
+                        <StackLayout Orientation="Horizontal" Spacing="6">
+                            <Label Text="{StaticResource IconWarningSimple}"
+                                   FontSize="13"
+                                   TextColor="{StaticResource WarningColor}"/>
+                            <Label Text="注意事项" FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource WarningColor}"/>
+                        </StackLayout>
+                        <Label Text="请认真对待评教，客观公正地评价教师教学" FontSize="11" TextColor="#555555"/>
+                        <Label Text="一键评教功能会自动填写评教内容，建议手动检查" FontSize="11" TextColor="#555555"/>
+                        <Label Text="评教完成后将无法修改，请谨慎操作" FontSize="11" TextColor="#555555"/>
+                    </StackLayout>
+                </Border>
+
+                <BoxView HeightRequest="20"/>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

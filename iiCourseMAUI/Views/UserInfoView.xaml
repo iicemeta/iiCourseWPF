@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="iiCourseMAUI.Views.UserInfoView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="用户信息"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ScrollView>
+        <StackLayout Spacing="0">
+            <!-- 头部标题 -->
+            <Border Style="{StaticResource PageHeaderStyle}">
+                <StackLayout Spacing="6">
+                    <Label Text="用户信息" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="查看您的个人信息" FontSize="13" TextColor="#D9FFFFFF"/>
+                </StackLayout>
+            </Border>
+
+            <StackLayout Padding="20" Spacing="16">
+                <!-- 用户基本信息卡片 -->
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                        <!-- 头像区域 -->
+                        <Border Grid.Column="0"
+                                WidthRequest="72" HeightRequest="72"
+                                BackgroundColor="{StaticResource HoverBackgroundColor}"
+                                StrokeShape="RoundRectangle 36"
+                                VerticalOptions="Start">
+                            <Label Text="{StaticResource IconUserSimple}"
+                                   FontSize="36"
+                                   TextColor="{StaticResource PrimaryColor}"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+
+                        <!-- 信息区域 -->
+                        <StackLayout Grid.Column="1" Spacing="6">
+                            <Label x:Name="NameLabel" Text="--"
+                                   FontSize="22" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"/>
+                            <Label x:Name="CollegeLabel" Text="--"
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"/>
+                        </StackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- 详细信息 -->
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <Grid RowDefinitions="Auto, Auto, Auto"
+                          ColumnDefinitions="*, *"
+                          RowSpacing="16" ColumnSpacing="12">
+
+                        <!-- 学号 -->
+                        <StackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="学号" Style="{StaticResource InfoLabelStyle}"/>
+                            <Label x:Name="StudentIdLabel" Text="--"
+                                   FontSize="17" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"/>
+                        </StackLayout>
+
+                        <!-- 姓名 -->
+                        <StackLayout Grid.Row="0" Grid.Column="1">
+                            <Label Text="姓名" Style="{StaticResource InfoLabelStyle}"/>
+                            <Label x:Name="NameDetailLabel" Text="--"
+                                   FontSize="17" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"/>
+                        </StackLayout>
+
+                        <!-- 性别 -->
+                        <StackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="性别" Style="{StaticResource InfoLabelStyle}"/>
+                            <Label x:Name="GenderLabel" Text="--"
+                                   FontSize="17" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"/>
+                        </StackLayout>
+
+                        <!-- 学院 -->
+                        <StackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="学院" Style="{StaticResource InfoLabelStyle}"/>
+                            <Label x:Name="CollegeDetailLabel" Text="--"
+                                   FontSize="17" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="2"/>
+                        </StackLayout>
+
+                        <!-- 登录状态 -->
+                        <StackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Label Text="登录状态" Style="{StaticResource InfoLabelStyle}"/>
+                            <Border BackgroundColor="{StaticResource LightGreenColor}"
+                                    StrokeShape="RoundRectangle 6"
+                                    Padding="10,6"
+                                    HorizontalOptions="Start">
+                                <StackLayout Orientation="Horizontal" Spacing="6">
+                                    <Label Text="{StaticResource IconCheckSimple}"
+                                           FontSize="12"
+                                           TextColor="{StaticResource SuccessColor}"/>
+                                    <Label x:Name="LoginStatusLabel" Text="已登录"
+                                           FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource SuccessColor}"/>
+                                </StackLayout>
+                            </Border>
+                        </StackLayout>
+                    </Grid>
+                </Border>
+
+                <BoxView HeightRequest="20"/>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

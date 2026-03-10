@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="iiCourseMAUI.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:iiCourseMAUI.Views"
+    Title="iiCourse"
+    FlyoutBackgroundColor="{StaticResource SidebarBackgroundColor}"
+    FlyoutWidth="260">
+
+    <Shell.FlyoutHeader>
+        <Border Background="{StaticResource HeaderGradientBrush}" Padding="20">
+            <Label Text="iiCourse" 
+                   FontSize="22" 
+                   FontAttributes="Bold" 
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+        </Border>
+    </Shell.FlyoutHeader>
+
+    <FlyoutItem Title="用户信息" Route="UserInfo">
+        <ShellContent ContentTemplate="{DataTemplate views:UserInfoView}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="课程表" Route="ClassSchedule">
+        <ShellContent ContentTemplate="{DataTemplate views:ClassScheduleView}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="成绩查询" Route="Score">
+        <ShellContent ContentTemplate="{DataTemplate views:ScoreView}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="空教室查询" Route="SpareClassroom">
+        <ShellContent ContentTemplate="{DataTemplate views:SpareClassroomView}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="一卡通信息" Route="CardInfo">
+        <ShellContent ContentTemplate="{DataTemplate views:CardInfoView}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="学生评教" Route="Evaluation">
+        <ShellContent ContentTemplate="{DataTemplate views:EvaluationView}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="设置" Route="Settings">
+        <ShellContent ContentTemplate="{DataTemplate views:SettingsView}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="隐私政策" Route="Privacy">
+        <ShellContent ContentTemplate="{DataTemplate views:PrivacyView}"/>
+    </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <Border BackgroundColor="#F5F5F5" Padding="16">
+            <StackLayout Spacing="8">
+                <StackLayout Orientation="Horizontal" Spacing="8">
+                    <Label x:Name="LoginStatusLabel" Text="未登录" 
+                           FontSize="12" TextColor="{StaticResource SecondaryDarkText}"/>
+                </StackLayout>
+                <Label x:Name="UserNameLabel" Text="" 
+                       FontSize="11" TextColor="{StaticResource SecondaryDarkText}"/>
+                <Button x:Name="LogoutButton" Text="退出登录" 
+                        FontSize="12" Padding="12,6"
+                        BackgroundColor="{StaticResource Gray200}"
+                        TextColor="{StaticResource Gray900}"
+                        CornerRadius="4"
+                        IsVisible="False"
+                        Clicked="OnLogoutClicked"/>
+            </StackLayout>
+        </Border>
+    </Shell.FlyoutFooter>
+
+</Shell>
