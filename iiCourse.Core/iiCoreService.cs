@@ -11,7 +11,7 @@ namespace iiCourse.Core
     /// <summary>
     /// iiCourse 核心服务类 - 提供教务系统相关功能
     /// </summary>
-    public class ZHSSService : IDisposable
+    public class iiCoreService : IDisposable
     {
         private readonly HttpClient _client;
         private readonly CookieContainer _cookieContainer;
@@ -26,7 +26,7 @@ namespace iiCourse.Core
 
         public bool IsLogin => _loginStatus;
 
-        public ZHSSService()
+        public iiCoreService()
         {
             _cookieContainer = new CookieContainer();
             _handler = new HttpClientHandler

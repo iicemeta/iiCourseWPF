@@ -17,7 +17,7 @@ namespace iiCourseWPF.Views
     /// </summary>
     public partial class SpareClassroomView : UserControl
     {
-        private ZHSSService? _service;
+        private iiCoreService? _service;
         private List<SpareClassroom> _classrooms = new();
         private List<BuildingInfo> _buildings = new();
         private Button? _currentCampusButton;
@@ -34,7 +34,7 @@ namespace iiCourseWPF.Views
         /// <summary>
         /// 设置服务实例
         /// </summary>
-        public void SetService(ZHSSService service)
+        public void SetService(iiCoreService service)
         {
             _service = service;
         }

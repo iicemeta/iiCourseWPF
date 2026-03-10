@@ -15,7 +15,7 @@ namespace iiCourseWPF.Views
     /// </summary>
     public partial class ClassScheduleView : UserControl
     {
-        private ZHSSService? _service;
+        private iiCoreService? _service;
         private List<ClassInfo> _classes = new();
         private List<SelectedTimeClassInfo> _customClasses = new();
         private List<SchoolYearInfo> _schoolYears = new();
@@ -35,7 +35,7 @@ namespace iiCourseWPF.Views
         /// <summary>
         /// 设置服务实例
         /// </summary>
-        public void SetService(ZHSSService service)
+        public void SetService(iiCoreService service)
         {
             _service = service;
         }
