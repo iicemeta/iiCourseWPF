@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -245,7 +244,7 @@ namespace iiCourseWPF.Views
 
                 if (finishResult.Code == 200 && finishResult.Data != null)
                 {
-                    var message = finishResult.Data.Any()
+                    var message = finishResult.Data.Count > 0
                         ? $"Completed {finishResult.Data.Count} reviews: {string.Join(", ", finishResult.Data)}"
                         : "No reviews to complete";
 

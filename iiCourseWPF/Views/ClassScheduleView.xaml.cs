@@ -194,7 +194,7 @@ namespace iiCourseWPF.Views
                     // 显示日期范围
                     if (_currentWeekDates != null)
                     {
-                        DateRangeText.Text = $"({_currentWeekDates.date1} - {_currentWeekDates.date7})";
+                        DateRangeText.Text = $"({_currentWeekDates.Date1} - {_currentWeekDates.Date7})";
                         UpdateDayHeadersWithDates();
                     }
                 }
@@ -223,13 +223,13 @@ namespace iiCourseWPF.Views
         {
             if (_currentWeekDates == null) return;
 
-            MondayHeader.Text = $"周一\n{_currentWeekDates.date1}";
-            TuesdayHeader.Text = $"周二\n{_currentWeekDates.date2}";
-            WednesdayHeader.Text = $"周三\n{_currentWeekDates.date3}";
-            ThursdayHeader.Text = $"周四\n{_currentWeekDates.date4}";
-            FridayHeader.Text = $"周五\n{_currentWeekDates.date5}";
-            SaturdayHeader.Text = $"周六\n{_currentWeekDates.date6}";
-            SundayHeader.Text = $"周日\n{_currentWeekDates.date7}";
+            MondayHeader.Text = $"周一\n{_currentWeekDates.Date1}";
+            TuesdayHeader.Text = $"周二\n{_currentWeekDates.Date2}";
+            WednesdayHeader.Text = $"周三\n{_currentWeekDates.Date3}";
+            ThursdayHeader.Text = $"周四\n{_currentWeekDates.Date4}";
+            FridayHeader.Text = $"周五\n{_currentWeekDates.Date5}";
+            SaturdayHeader.Text = $"周六\n{_currentWeekDates.Date6}";
+            SundayHeader.Text = $"周日\n{_currentWeekDates.Date7}";
         }
 
         /// <summary>

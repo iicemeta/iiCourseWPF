@@ -91,7 +91,7 @@ namespace iiCourseWPF.Views
         /// <summary>
         /// Show error message
         /// </summary>
-        private void ShowError(string message)
+        private void ShowError(string _)
         {
             NameText.Text = "--";
             CollegeText.Text = "--";

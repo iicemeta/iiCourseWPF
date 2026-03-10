@@ -137,13 +137,13 @@ namespace iiCourse.Core.Models
     /// </summary>
     public class WeekDateInfo
     {
-        public string date1 { get; set; } = string.Empty;
-        public string date2 { get; set; } = string.Empty;
-        public string date3 { get; set; } = string.Empty;
-        public string date4 { get; set; } = string.Empty;
-        public string date5 { get; set; } = string.Empty;
-        public string date6 { get; set; } = string.Empty;
-        public string date7 { get; set; } = string.Empty;
+        public string Date1 { get; set; } = string.Empty;
+        public string Date2 { get; set; } = string.Empty;
+        public string Date3 { get; set; } = string.Empty;
+        public string Date4 { get; set; } = string.Empty;
+        public string Date5 { get; set; } = string.Empty;
+        public string Date6 { get; set; } = string.Empty;
+        public string Date7 { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ namespace iiCourse.Core.Models
         public string ZZZ { get; set; } = string.Empty;
         public string JSXM { get; set; } = string.Empty;
         public string SKZ { get; set; } = string.Empty;
-        public string colorNum { get; set; } = string.Empty;
+        public string ColorNum { get; set; } = string.Empty;
     }
 
     /// <summary>

@@ -51,6 +51,7 @@ namespace iiCourse.Core
         {
             _client.Dispose();
             _handler.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace iiCourse.Core
                 if (ltNode == null)
                 {
                     Log("Error: Cannot find LT element");
-                    Log($"Page content preview: {content.Substring(0, Math.Min(500, content.Length))}...");
+                    Log($"Page content preview: {content[..Math.Min(500, content.Length)]}...");
                     return (false, "Cannot get LT value");
                 }
                 var lt = ltNode.GetAttributeValue("value", "");
@@ -166,7 +167,7 @@ namespace iiCourse.Core
 
                 var response = await _client.PostAsync("https://zhss.sdtbu.edu.cn/tp_up/sys/uacm/profile/getUserInfo", content);
                 var result = await response.Content.ReadAsStringAsync();
-                Log($"User info response: {result.Substring(0, Math.Min(200, result.Length))}...");
+                Log($"User info response: {result[..Math.Min(200, result.Length)]}...");
 
                 var jsonDoc = JObject.Parse(result);
 
@@ -303,7 +304,7 @@ namespace iiCourse.Core
                 var response = await _client.PostAsync("http://wmh.sdtbu.edu.cn:7011/tp_wp/wp/kxclassroom/getbuild", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith("<"))
+                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith('<'))
                 {
                     Log("Failed to get building list: Server returned non-JSON data, may be not logged in");
                     return result;
@@ -348,11 +349,11 @@ namespace iiCourse.Core
                 foreach (var response in responses)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith("<"))
-                    {
-                        Log("Failed to get spare classrooms: Server returned non-JSON data, may be not logged in");
-                        continue;
-                    }
+                    if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith('<'))
+                {
+                    Log("Failed to get spare classrooms: Server returned non-JSON data, may be not logged in");
+                    continue;
+                }
 
                     var jsonDoc = JArray.Parse(responseContent);
                     foreach (var item in jsonDoc)
@@ -384,7 +385,7 @@ namespace iiCourse.Core
                 var infoResponse = await _client.PostAsync("http://wmh.sdtbu.edu.cn:7011/tp_wp/wp/wxH6/wpHome/getLearnweekbyDate", content);
                 var infoResult = await infoResponse.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrWhiteSpace(infoResult) || infoResult.TrimStart().StartsWith("<"))
+                if (string.IsNullOrWhiteSpace(infoResult) || infoResult.TrimStart().StartsWith('<'))
                 {
                     Log("Failed to get class info: Server returned HTML page, may be not logged in or session expired");
                     throw new InvalidOperationException("Failed to get class info, please login again");
@@ -409,7 +410,7 @@ namespace iiCourse.Core
                 var classResponse = await _client.PostAsync("http://wmh.sdtbu.edu.cn:7011/tp_wp/wp/wxH6/wpHome/getWeekClassbyUserId", classContent);
                 var classResult = await classResponse.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrWhiteSpace(classResult) || classResult.TrimStart().StartsWith("<"))
+                if (string.IsNullOrWhiteSpace(classResult) || classResult.TrimStart().StartsWith('<'))
                 {
                     Log("Failed to get class details: Server returned HTML page");
                     throw new InvalidOperationException("Failed to get class details");
@@ -475,7 +476,7 @@ namespace iiCourse.Core
                 var response = await _client.PostAsync("https://zhss.sdtbu.edu.cn/tp_up/up/widgets/getSchoolYear", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith("<"))
+                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith('<'))
                 {
                     Log("Failed to get school years: Server returned non-JSON data");
                     return result;
@@ -512,7 +513,7 @@ namespace iiCourse.Core
                 var response = await _client.PostAsync("https://zhss.sdtbu.edu.cn/tp_up/up/widgets/getClassbyUserInfo", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith("<"))
+                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith('<'))
                 {
                     Log("Failed to get user classes: Server returned non-JSON data");
                     return result;
@@ -563,7 +564,7 @@ namespace iiCourse.Core
                 var response = await _client.PostAsync("https://zhss.sdtbu.edu.cn/tp_up/up/widgets/getDatebyLearnweek", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith("<"))
+                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith('<'))
                 {
                     Log("Failed to get week dates: Server returned non-JSON data");
                     return null;
@@ -572,13 +573,13 @@ namespace iiCourse.Core
                 var jsonDoc = JObject.Parse(responseContent);
                 return new WeekDateInfo
                 {
-                    date1 = jsonDoc["date1"]?.ToString() ?? "",
-                    date2 = jsonDoc["date2"]?.ToString() ?? "",
-                    date3 = jsonDoc["date3"]?.ToString() ?? "",
-                    date4 = jsonDoc["date4"]?.ToString() ?? "",
-                    date5 = jsonDoc["date5"]?.ToString() ?? "",
-                    date6 = jsonDoc["date6"]?.ToString() ?? "",
-                    date7 = jsonDoc["date7"]?.ToString() ?? ""
+                    Date1 = jsonDoc["date1"]?.ToString() ?? "",
+                    Date2 = jsonDoc["date2"]?.ToString() ?? "",
+                    Date3 = jsonDoc["date3"]?.ToString() ?? "",
+                    Date4 = jsonDoc["date4"]?.ToString() ?? "",
+                    Date5 = jsonDoc["date5"]?.ToString() ?? "",
+                    Date6 = jsonDoc["date6"]?.ToString() ?? "",
+                    Date7 = jsonDoc["date7"]?.ToString() ?? ""
                 };
             }
             catch (Exception ex)
@@ -609,7 +610,7 @@ namespace iiCourse.Core
                 var response = await _client.PostAsync("https://zhss.sdtbu.edu.cn/tp_up/up/widgets/getClassbyTime", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith("<"))
+                if (string.IsNullOrWhiteSpace(responseContent) || responseContent.TrimStart().StartsWith('<'))
                 {
                     Log("Failed to get classes by time: Server returned non-JSON data");
                     return result;
@@ -637,7 +638,7 @@ namespace iiCourse.Core
                         ZZZ = item["ZZZ"]?.ToString() ?? "",
                         JSXM = item["JSXM"]?.ToString() ?? "",
                         SKZ = item["SKZ"]?.ToString() ?? "",
-                        colorNum = item["colorNum"]?.ToString() ?? ""
+                        ColorNum = item["colorNum"]?.ToString() ?? ""
                     });
                 }
             }
@@ -656,7 +657,7 @@ namespace iiCourse.Core
             try
             {
                 var userClasses = await GetUserClassesAsync(parameters.SchoolYear, parameters.Semester, parameters.LearnWeek);
-                if (!userClasses.Any())
+                if (userClasses.Count == 0)
                 {
                     return (new List<SelectedTimeClassInfo>(), null, "No class info found");
                 }
@@ -728,7 +729,7 @@ namespace iiCourse.Core
             try
             {
                 var reviewsData = await GetStudentReviewsAsync();
-                if (reviewsData.Data == null || !reviewsData.Data.Any())
+                if (reviewsData.Data == null || reviewsData.Data.Count == 0)
                 {
                     return new ApiResponse<List<StudentReviewDetail>> { Code = 404, Message = "No review data" };
                 }
@@ -780,7 +781,7 @@ namespace iiCourse.Core
             try
             {
                 var detailData = await GetStudentReviewsDetailAsync();
-                if (detailData.Data == null || !detailData.Data.Any())
+                if (detailData.Data == null || detailData.Data.Count == 0)
                 {
                     return new ApiResponse<List<string>> { Code = 404, Message = "No reviews to complete" };
                 }

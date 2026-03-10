@@ -75,7 +75,7 @@ namespace iiCourseWPF.Views
 
                 _buildings = await _service.GetBuildingsAsync(campusId);
 
-                if (_buildings.Any())
+                if (_buildings.Count > 0)
                 {
                     foreach (var building in _buildings)
                     {
@@ -177,7 +177,7 @@ namespace iiCourseWPF.Views
 
                 _classrooms = await _service.GetSpareClassroomAsync(buildingId);
 
-                if (_classrooms.Any())
+                if (_classrooms.Count > 0)
                 {
                     GeneratePeriodFilterButtons();
                     DisplayClassroomsByPeriod();
@@ -291,7 +291,7 @@ namespace iiCourseWPF.Views
         /// <summary>
         /// Set period button active state
         /// </summary>
-        private void SetPeriodButtonActive(Button button)
+        private static void SetPeriodButtonActive(Button button)
         {
             button.Background = new SolidColorBrush(Color.FromRgb(255, 107, 53));
             button.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 107, 53));
@@ -427,7 +427,7 @@ namespace iiCourseWPF.Views
         /// <summary>
         /// Create classroom tag
         /// </summary>
-        private Border CreateClassroomTag(SpareClassroom classroom)
+        private static Border CreateClassroomTag(SpareClassroom classroom)
         {
             var border = new Border
             {
@@ -544,7 +544,7 @@ namespace iiCourseWPF.Views
         /// <summary>
         /// Reset button style
         /// </summary>
-        private void ResetButtonStyle(Button button)
+        private static void ResetButtonStyle(Button button)
         {
             button.Background = new SolidColorBrush(Color.FromRgb(232, 245, 233));
             button.Foreground = new SolidColorBrush(Color.FromRgb(45, 90, 61));
@@ -553,7 +553,7 @@ namespace iiCourseWPF.Views
         /// <summary>
         /// Set active button style
         /// </summary>
-        private void SetActiveButtonStyle(Button button)
+        private static void SetActiveButtonStyle(Button button)
         {
             button.Background = new SolidColorBrush(Color.FromRgb(45, 90, 61));
             button.Foreground = Brushes.White;
