@@ -262,39 +262,37 @@
                         </StackPanel>
 
                         <!-- 成绩表格 -->
-                        <Border Grid.Row="1" BorderBrush="#E8E8E8" BorderThickness="1" 
+                        <Border Grid.Row="1" BorderBrush="#E8E8E8" BorderThickness="1"
                                 CornerRadius="8" Background="White">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                                <StackPanel x:Name="ScorePanel">
-                                    <!-- 表头 -->
-                                    <Border Style="{StaticResource HeaderStyle}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="2*" MinWidth="120"/>
-                                                <ColumnDefinition Width="*" MinWidth="50"/>
-                                                <ColumnDefinition Width="*" MinWidth="50"/>
-                                                <ColumnDefinition Width="*" MinWidth="50"/>
-                                                <ColumnDefinition Width="*" MinWidth="60"/>
-                                                <ColumnDefinition Width="*" MinWidth="80"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="课程名称" FontSize="11" FontWeight="SemiBold" 
-                                                      Foreground="White" VerticalAlignment="Center"/>
-                                            <TextBlock Grid.Column="1" Text="学分" FontSize="11" FontWeight="SemiBold" 
-                                                      Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
-                                            <TextBlock Grid.Column="2" Text="成绩" FontSize="11" FontWeight="SemiBold" 
-                                                      Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
-                                            <TextBlock Grid.Column="3" Text="绩点" FontSize="11" FontWeight="SemiBold" 
-                                                      Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
-                                            <TextBlock Grid.Column="4" Text="性质" FontSize="11" FontWeight="SemiBold" 
-                                                      Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
-                                            <TextBlock Grid.Column="5" Text="学期" FontSize="11" FontWeight="SemiBold" 
-                                                      Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Border>
+                            <StackPanel x:Name="ScorePanel">
+                                <!-- 表头 -->
+                                <Border Style="{StaticResource HeaderStyle}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" MinWidth="120"/>
+                                            <ColumnDefinition Width="*" MinWidth="50"/>
+                                            <ColumnDefinition Width="*" MinWidth="50"/>
+                                            <ColumnDefinition Width="*" MinWidth="50"/>
+                                            <ColumnDefinition Width="*" MinWidth="60"/>
+                                            <ColumnDefinition Width="*" MinWidth="80"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="课程名称" FontSize="11" FontWeight="SemiBold"
+                                                  Foreground="White" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="学分" FontSize="11" FontWeight="SemiBold"
+                                                  Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="成绩" FontSize="11" FontWeight="SemiBold"
+                                                  Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="3" Text="绩点" FontSize="11" FontWeight="SemiBold"
+                                                  Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="4" Text="性质" FontSize="11" FontWeight="SemiBold"
+                                                  Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="5" Text="学期" FontSize="11" FontWeight="SemiBold"
+                                                  Foreground="White" TextAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
 
-                                    <!-- 成绩数据将在这里动态生成 -->
-                                </StackPanel>
-                            </ScrollViewer>
+                                <!-- 成绩数据将在这里动态生成 -->
+                            </StackPanel>
                         </Border>
                     </Grid>
                 </Border>

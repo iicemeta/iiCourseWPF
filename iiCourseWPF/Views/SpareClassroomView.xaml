@@ -103,22 +103,19 @@
                                       FontSize="12" Foreground="#7F8C8D" VerticalAlignment="Center"/>
                         </Grid>
 
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="450" 
-                                     HorizontalScrollBarVisibility="Disabled">
-                            <StackPanel x:Name="ClassroomByPeriodPanel">
-                                <!-- 按课时分组的内容将在这里动态生成 -->
-                                <Border Style="{StaticResource PeriodRowStyle}" Background="{StaticResource LightBackgroundColor}">
-                                    <StackPanel>
-                                        <Path Width="32" Height="32" Data="{StaticResource RoomIcon}"
-                                              Fill="#7F8C8D" Stretch="Uniform" Margin="0,0,0,10"
-                                              HorizontalAlignment="Center"/>
-                                        <TextBlock Text="请选择教学楼查询" 
-                                                  FontSize="12" Foreground="#7F8C8D" 
-                                                  TextAlignment="Center" TextWrapping="Wrap"/>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-                        </ScrollViewer>
+                        <StackPanel x:Name="ClassroomByPeriodPanel">
+                            <!-- 按课时分组的内容将在这里动态生成 -->
+                            <Border Style="{StaticResource PeriodRowStyle}" Background="{StaticResource LightBackgroundColor}">
+                                <StackPanel>
+                                    <Path Width="32" Height="32" Data="{StaticResource RoomIcon}"
+                                          Fill="#7F8C8D" Stretch="Uniform" Margin="0,0,0,10"
+                                          HorizontalAlignment="Center"/>
+                                    <TextBlock Text="请选择教学楼查询"
+                                              FontSize="12" Foreground="#7F8C8D"
+                                              TextAlignment="Center" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </StackPanel>
