@@ -107,7 +107,8 @@
                                 </Grid.ColumnDefinitions>
                                 <Path Grid.Column="0" Style="{StaticResource InputIconStyle}" 
                                       Data="{StaticResource LockIcon}"/>
-                                <PasswordBox Grid.Column="1" 
+                                <PasswordBox x:Name="PasswordBox"
+                                            Grid.Column="1" 
                                             PasswordChanged="OnPasswordChanged"
                                             BorderThickness="0" 
                                             FontSize="14" VerticalAlignment="Center" 

@@ -31,6 +31,19 @@ namespace iiCourseWPF.Views
         {
             var view = (LoginView)d;
             view.DataContext = e.NewValue;
+
+            // 如果ViewModel已加载且存在已保存的密码，在密码框中显示占位符
+            if (e.NewValue is LoginViewModel viewModel && !string.IsNullOrEmpty(viewModel.Password))
+            {
+                view.Dispatcher.BeginInvoke(() =>
+                {
+                    // 显示6个占位符字符，提示用户密码已保存
+                    // 使用特殊标记避免同步回ViewModel
+                    view.PasswordBox.Tag = "Placeholder";
+                    view.PasswordBox.Password = "●●●●●●";
+                    view.PasswordBox.Tag = null;
+                }, System.Windows.Threading.DispatcherPriority.Render);
+            }
         }
 
         /// <summary>
@@ -40,6 +53,10 @@ namespace iiCourseWPF.Views
         {
             if (ViewModel != null && sender is PasswordBox passwordBox)
             {
+                // 如果是初始化占位符，不要同步回ViewModel
+                if (passwordBox.Tag?.ToString() == "Placeholder")
+                    return;
+
                 ViewModel.Password = passwordBox.Password;
             }
         }
