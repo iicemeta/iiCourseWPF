@@ -110,8 +110,9 @@ namespace iiCourseWPF
 
             if (targetView != null)
             {
-                await ShowViewAsync(targetView);
+                // 先立即更新侧边栏选中状态，提供即时反馈
                 Sidebar.SetActiveMenu(viewName);
+                await ShowViewAsync(targetView);
             }
         }
 

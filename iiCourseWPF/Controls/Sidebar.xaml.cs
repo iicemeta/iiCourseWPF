@@ -77,7 +77,9 @@ namespace iiCourseWPF.Controls
         {
             if (sender is Button button && button.Tag is string tag)
             {
-                SetActiveMenu(tag);
+                // 不在这里立即更新UI状态
+                // 选中状态由 MainWindow 在视图切换完成后统一更新
+                // 避免异步加载导致的闪烁问题
                 MenuClicked?.Invoke(tag);
             }
         }
