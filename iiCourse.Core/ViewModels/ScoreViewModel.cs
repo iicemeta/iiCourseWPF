@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using iiCourse.Core.Commands;
+using iiCourse.Core.Models;
 using Newtonsoft.Json.Linq;
 
 namespace iiCourse.Core.ViewModels
@@ -133,42 +134,37 @@ namespace iiCourse.Core.ViewModels
         {
             try
             {
+                List<SchoolYearInfo> years;
+
                 // 先尝试从缓存获取
                 var cachedYears = _coreService.GetCachedSchoolYears();
                 if (cachedYears.Count > 0)
                 {
-                    // 有缓存，直接使用
-                    var options = new ObservableCollection<SchoolYearOption>
-                    {
-                        new() { DisplayName = "请选择", Value = "" }
-                    };
-                    foreach (var year in cachedYears)
-                    {
-                        options.Add(new SchoolYearOption
-                        {
-                            DisplayName = year.SCHOOL_YEAR,
-                            Value = year.SCHOOL_YEAR
-                        });
-                    }
-                    SchoolYears = options;
-                    return;
+                    years = cachedYears;
+                }
+                else
+                {
+                    // 没有缓存，从API加载
+                    years = await _coreService.GetSchoolYearsAsync();
                 }
 
-                // 没有缓存，从API加载
-                var years = await _coreService.GetSchoolYearsAsync();
-                var newOptions = new ObservableCollection<SchoolYearOption>
-                {
-                    new() { DisplayName = "请选择", Value = "" }
-                };
+                var options = new ObservableCollection<SchoolYearOption>();
                 foreach (var year in years)
                 {
-                    newOptions.Add(new SchoolYearOption
+                    options.Add(new SchoolYearOption
                     {
                         DisplayName = year.SCHOOL_YEAR,
                         Value = year.SCHOOL_YEAR
                     });
                 }
-                SchoolYears = newOptions;
+
+                SchoolYears = options;
+
+                // 默认选中最新一期（列表第一个元素）
+                if (options.Count > 0)
+                {
+                    SelectedSchoolYear = options[0].Value;
+                }
             }
             catch (Exception ex)
             {
