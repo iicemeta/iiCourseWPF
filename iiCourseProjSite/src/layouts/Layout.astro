@@ -18,9 +18,45 @@ const { title, description = "iiCourse - 智慧校园桌面应用" } = Astro.pro
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/iiCourse.png" />
     <link rel="shortcut icon" type="image/x-icon" href="/iiCourse.ico" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <title>{title} | iiCourse</title>
+    
+    <style>
+      /* 全局字体设置 */
+      body {
+        font-family: 'Nunito', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+      }
+      
+      /* 平滑滚动 */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* 选中文字样式 */
+      ::selection {
+        background: rgba(255, 107, 53, 0.3);
+        color: #1f2937;
+      }
+    </style>
   </head>
-  <body class="min-h-screen flex flex-col bg-base-100">
+  <body class="min-h-screen flex flex-col">
+    <!-- 动态背景装饰 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <!-- 主要光晕 -->
+      <div class="orb orb-primary w-[600px] h-[600px] -top-40 -right-40 opacity-60"></div>
+      <div class="orb orb-secondary w-[500px] h-[500px] top-1/3 -left-40 opacity-50"></div>
+      <div class="orb orb-accent w-[400px] h-[400px] bottom-20 right-1/4 opacity-40"></div>
+      
+      <!-- 额外装饰光晕 -->
+      <div class="orb orb-primary w-[300px] h-[300px] top-2/3 right-10 opacity-30"></div>
+      <div class="orb orb-secondary w-[350px] h-[350px] bottom-1/4 left-1/4 opacity-35"></div>
+    </div>
+    
     <slot />
   </body>
 </html>

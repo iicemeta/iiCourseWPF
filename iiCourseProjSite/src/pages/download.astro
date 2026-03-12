@@ -24,58 +24,72 @@ const {
 <Layout title="下载" description="下载 iiCourse 最新版本">
   <Navigation />
 
-  <main class="pt-24 pb-16">
+  <main class="pt-32 pb-16 relative z-10">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- 页面标题 -->
       <div class="text-center mb-16">
-        <h1 class="section-title mb-4">⬇️ {pageTitle.slice(0, 2)}<span class="gradient-text">{pageTitle.slice(2)}</span></h1>
-        <p class="text-xl text-base-content/70">
+        <span class="badge badge-glass mb-4">免费下载</span>
+        <h1 class="section-title mb-4">
+          <span class="gradient-text-warm">{pageTitle}</span>
+        </h1>
+        <p class="text-xl text-gray-600">
           {pageSubtitle}
         </p>
       </div>
 
       <!-- 下载卡片 -->
-      <div class="card bg-base-100 shadow-2xl overflow-hidden mb-12">
-        <div class="bg-gradient-to-br from-primary to-secondary p-8 text-white text-center">
-          <div class="text-sm opacity-80 mb-2">最新版本</div>
-          <div class="text-5xl font-bold mb-2">v{currentVersion}</div>
-          <div class="text-sm opacity-80">发布于 {releaseDate}</div>
+      <div class="glass-panel overflow-hidden mb-12">
+        <!-- 版本信息头部 -->
+        <div class="relative bg-gradient-to-br from-orange-400 to-pink-400 p-8 text-white text-center overflow-hidden">
+          <!-- 装饰光晕 -->
+          <div class="absolute top-0 left-0 w-40 h-40 bg-white/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute bottom-0 right-0 w-40 h-40 bg-white/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+          
+          <div class="relative">
+            <div class="text-sm opacity-90 mb-2 font-medium">最新版本</div>
+            <div class="text-6xl font-bold mb-2">v{currentVersion}</div>
+            <div class="text-sm opacity-90">发布于 {releaseDate}</div>
+          </div>
         </div>
 
-        <div class="card-body">
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <!-- 下载按钮区域 -->
+        <div class="p-8">
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <a
               href={downloadButton.href}
-              class="btn btn-primary btn-lg w-full sm:w-auto gap-2"
+              class="btn btn-primary btn-lg w-full sm:w-auto gap-3 group"
             >
-              <span class="text-2xl">{downloadButton.icon}</span>
+              <span class="text-2xl group-hover:scale-110 transition-transform">{downloadButton.icon}</span>
               <span>{downloadButton.text}</span>
             </a>
             <a
               href={changelogButton.href}
-              class="btn btn-outline btn-lg w-full sm:w-auto"
+              class="btn btn-secondary btn-lg w-full sm:w-auto"
             >
               {changelogButton.text}
             </a>
           </div>
 
-          <div class="text-center text-sm text-base-content/50">
-            <p>{downloadNote}</p>
+          <div class="text-center">
+            <div class="inline-flex items-center gap-2 tag">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span class="text-gray-600">{downloadNote}</span>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- 系统要求 -->
       <div class="mb-12">
-        <h2 class="text-2xl font-bold text-base-content mb-6 text-center">💻 {systemRequirementsTitle}</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">{systemRequirementsTitle}</h2>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {systemRequirements.map((req) => (
-            <div class="card bg-base-100 shadow-lg">
-              <div class="card-body items-center text-center">
-                <div class="text-4xl mb-3">{req.icon}</div>
-                <h3 class="card-title text-base">{req.title}</h3>
-                <p class="text-sm text-base-content/70">{req.desc}</p>
-              </div>
+            <div class="glass rounded-2xl p-6 text-center hover:scale-105 transition-transform">
+              <div class="text-4xl mb-3">{req.icon}</div>
+              <h3 class="font-bold text-gray-900 mb-1">{req.title}</h3>
+              <p class="text-sm text-gray-600">{req.desc}</p>
             </div>
           ))}
         </div>
@@ -83,18 +97,16 @@ const {
 
       <!-- 安装步骤 -->
       <div class="mb-12">
-        <h2 class="text-2xl font-bold text-base-content mb-6 text-center">📝 {installStepsTitle}</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">{installStepsTitle}</h2>
         <div class="space-y-4">
-          {installSteps.map((item) => (
-            <div class="card bg-base-100 shadow-lg">
-              <div class="card-body flex-row items-start gap-4">
-                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
-                  {item.step}
-                </div>
-                <div>
-                  <h3 class="font-semibold text-base-content">{item.title}</h3>
-                  <p class="text-base-content/70">{item.desc}</p>
-                </div>
+          {installSteps.map((item, index) => (
+            <div class="glass rounded-2xl p-6 flex items-start gap-5 group hover:shadow-lg transition-all">
+              <div class="step-number flex-shrink-0 group-hover:scale-110 transition-transform">
+                {item.step}
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 text-lg mb-1">{item.title}</h3>
+                <p class="text-gray-600">{item.desc}</p>
               </div>
             </div>
           ))}
@@ -102,14 +114,19 @@ const {
       </div>
 
       <!-- 常见问题 -->
-      <div class="card bg-base-200">
-        <div class="card-body">
-          <h2 class="card-title text-2xl mb-6">❓ {faqTitle}</h2>
+      <div class="glass-panel">
+        <div class="p-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">{faqTitle}</h2>
           <div class="space-y-6">
-            {faqItems.map((item) => (
-              <div>
-                <h3 class="font-semibold text-base-content mb-2">{item.question}</h3>
-                <p class="text-base-content/70">{item.answer}</p>
+            {faqItems.map((item, index) => (
+              <div class="border-b border-gray-200/50 last:border-0 pb-6 last:pb-0">
+                <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center text-xs font-bold">
+                    {index + 1}
+                  </span>
+                  {item.question}
+                </h3>
+                <p class="text-gray-600 pl-8">{item.answer}</p>
               </div>
             ))}
           </div>

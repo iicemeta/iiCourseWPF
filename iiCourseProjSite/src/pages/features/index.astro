@@ -6,31 +6,35 @@ import Footer from '../../components/Footer.astro';
 const features = [
   { 
     title: '课程表查询', 
-    description: '查看完整课表，支持按学年、学期、周次筛选',
+    description: '查看完整课表，支持按学年、学期、周次筛选。清晰展示课程时间、地点、教师信息，让上课安排一目了然。',
     icon: '📅',
     href: '/features/schedule',
-    color: 'from-orange-400 to-red-500'
+    gradient: 'from-orange-400 to-pink-400',
+    features: ['周视图/日视图切换', '课程详情查看', '多学期管理']
   },
   { 
     title: '成绩查询', 
-    description: '查询各科成绩，自动计算 GPA',
+    description: '查询各科成绩，自动计算 GPA。支持按学年筛选，成绩趋势分析，让你全面掌握学业表现。',
     icon: '📊',
     href: '/features/scores',
-    color: 'from-blue-400 to-cyan-500'
+    gradient: 'from-blue-400 to-cyan-400',
+    features: ['自动 GPA 计算', '成绩趋势图', '学分统计']
   },
   { 
     title: '空教室查询', 
-    description: '查找空闲教室，支持按教学楼筛选',
+    description: '查找空闲教室，支持按教学楼筛选。自习好去处，快速找到适合学习的空教室。',
     icon: '🏫',
     href: '/features/classrooms',
-    color: 'from-green-400 to-emerald-500'
+    gradient: 'from-green-400 to-teal-400',
+    features: ['按教学楼筛选', '实时空闲状态', '收藏常用教室']
   },
   { 
     title: '用户信息', 
-    description: '查看个人资料和一卡通信息',
+    description: '查看个人资料和一卡通信息。余额查询、消费记录，个人信息一手掌握。',
     icon: '👤',
     href: '/features/profile',
-    color: 'from-purple-400 to-pink-500'
+    gradient: 'from-purple-400 to-pink-400',
+    features: ['一卡通余额', '消费记录', '个人信息']
   },
 ];
 ---
@@ -38,38 +42,79 @@ const features = [
 <Layout title="功能展示" description="探索 iiCourse 的各项功能">
   <Navigation />
   
-  <main class="pt-24 pb-16">
+  <main class="pt-32 pb-16 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- 页面标题 -->
       <div class="text-center mb-16">
-        <h1 class="section-title mb-4">功能<span class="gradient-text">演示</span></h1>
-        <p class="text-xl text-base-content/70 max-w-2xl mx-auto">
+        <span class="badge badge-glass mb-4">功能演示</span>
+        <h1 class="section-title mb-4">
+          功能<span class="gradient-text-warm">演示</span>
+        </h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
           下面是应用的核心功能展示，使用示例数据模拟真实界面
         </p>
       </div>
       
+      <!-- 功能卡片网格 -->
       <div class="grid md:grid-cols-2 gap-8">
         {features.map(feature => (
           <a href={feature.href} class="group block">
-            <div class="card bg-base-100 shadow-xl h-full hover:shadow-2xl transition-all duration-300">
-              <div class="card-body">
-                <div class={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center 
-                            text-4xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
+            <div class="glass-panel h-full hover:shadow-2xl transition-all duration-300 group-hover:-translate-y-2">
+              <div class="p-8">
+                <!-- 图标 -->
+                <div class={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center 
+                            text-4xl mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   {feature.icon}
                 </div>
-                <h3 class="card-title text-2xl">{feature.title}</h3>
-                <p class="text-base-content/70 text-lg">{feature.description}</p>
-                <div class="card-actions mt-6">
-                  <span class="text-primary font-semibold flex items-center gap-2">
-                    查看演示
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:translate-x-2 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </span>
+                
+                <!-- 标题 -->
+                <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-orange-500 transition-colors">
+                  {feature.title}
+                </h3>
+                
+                <!-- 描述 -->
+                <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                  {feature.description}
+                </p>
+                
+                <!-- 功能列表 -->
+                <div class="flex flex-wrap gap-2 mb-6">
+                  {feature.features.map(item => (
+                    <span class="tag text-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-green-500 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                
+                <!-- 查看演示按钮 -->
+                <div class="flex items-center gap-2 text-orange-500 font-semibold">
+                  <span>查看演示</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:translate-x-2 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
                 </div>
               </div>
             </div>
           </a>
         ))}
+      </div>
+      
+      <!-- 底部提示 -->
+      <div class="mt-16 text-center">
+        <div class="glass-panel inline-block p-6">
+          <p class="text-gray-600 mb-4">还有更多功能等你探索</p>
+          <a href="/download" class="btn btn-primary gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            下载体验完整功能
+          </a>
+        </div>
       </div>
     </div>
   </main>

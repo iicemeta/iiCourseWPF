@@ -6,47 +6,133 @@ const navItems = [
   { href: '/news', label: '新闻' },
   { href: '/download', label: '下载' },
 ];
+
+const currentPath = Astro.url.pathname;
 ---
 
-<nav class="navbar bg-base-100/80 backdrop-blur-md border-b border-base-300 fixed top-0 left-0 right-0 z-50">
-  <div class="navbar-start">
-    <!-- Logo -->
-    <a href="/" class="btn btn-ghost normal-case text-xl gap-2">
-      <img src="/iiCourse.png" alt="iiCourse" class="w-8 h-8 rounded-lg" />
-      <span class="font-bold text-base-content">iiCourse</span>
-    </a>
-  </div>
-  
-  <div class="navbar-center hidden md:flex">
-    <ul class="menu menu-horizontal px-1 gap-2">
-      {navItems.map(item => (
-        <li>
-          <a href={item.href} class="hover:text-primary transition-colors">
-            {item.label}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
-  
-  <div class="navbar-end">
-    <!-- 移动端菜单 -->
-    <div class="dropdown dropdown-end md:hidden">
-      <label tabindex="0" class="btn btn-ghost btn-circle">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </label>
-      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-        {navItems.map(item => (
-          <li><a href={item.href}>{item.label}</a></li>
-        ))}
-      </ul>
+<nav class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-3">
+  <div class="glass-strong rounded-2xl px-6 py-3 max-w-7xl mx-auto">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="relative">
+          <img src="/iiCourse.png" alt="iiCourse" class="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform" />
+          <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <span class="font-bold text-xl text-gray-900">iiCourse</span>
+      </a>
+      
+      <!-- 桌面端导航 -->
+      <div class="hidden md:flex items-center gap-1">
+        {navItems.map(item => {
+          const isActive = currentPath === item.href || currentPath.startsWith(item.href + '/');
+          return (
+            <a 
+              href={item.href} 
+              class={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                isActive 
+                  ? 'text-orange-500 bg-orange-50' 
+                  : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
+              }`}
+            >
+              {item.label}
+            </a>
+          );
+        })}
+      </div>
+      
+      <!-- 右侧操作区 -->
+      <div class="flex items-center gap-3">
+        <!-- 下载按钮 -->
+        <a href="/download" class="hidden md:flex btn btn-primary btn-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          立即下载
+        </a>
+        
+        <!-- 移动端菜单按钮 -->
+        <button 
+          id="mobile-menu-btn" 
+          class="md:hidden p-2 rounded-xl hover:bg-orange-50 transition-colors"
+          aria-label="打开菜单"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
     </div>
     
-    <!-- 下载按钮 -->
-    <a href="/download" class="btn btn-primary btn-sm hidden md:flex">
-      立即下载
-    </a>
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden mt-4 pt-4 border-t border-gray-200/50">
+      <div class="flex flex-col gap-2">
+        {navItems.map(item => {
+          const isActive = currentPath === item.href || currentPath.startsWith(item.href + '/');
+          return (
+            <a 
+              href={item.href} 
+              class={`px-4 py-3 rounded-xl font-medium transition-all ${
+                isActive 
+                  ? 'text-orange-500 bg-orange-50' 
+                  : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
+              }`}
+            >
+              {item.label}
+            </a>
+          );
+        })}
+        <a href="/download" class="btn btn-primary mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          立即下载
+        </a>
+      </div>
+    </div>
   </div>
 </nav>
+
+<script>
+  // 移动端菜单切换
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+  
+  // 滚动时导航栏效果
+  let lastScroll = 0;
+  const nav = document.querySelector('nav');
+  
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > 100) {
+      nav?.classList.add('nav-scrolled');
+    } else {
+      nav?.classList.remove('nav-scrolled');
+    }
+    
+    lastScroll = currentScroll;
+  });
+</script>
+
+<style>
+  /* 滚动后的导航栏样式 */
+  .nav-scrolled {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .nav-scrolled > div {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+</style>

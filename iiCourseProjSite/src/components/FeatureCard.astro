@@ -7,15 +7,42 @@ export interface Props {
 }
 
 const { icon, title, description, color } = Astro.props;
+
+// 将颜色映射到渐变
+const colorGradients: Record<string, string> = {
+  'bg-orange-100': 'from-orange-400 to-pink-400',
+  'bg-blue-100': 'from-blue-400 to-cyan-400',
+  'bg-green-100': 'from-green-400 to-teal-400',
+  'bg-purple-100': 'from-purple-400 to-pink-400',
+  'bg-yellow-100': 'from-yellow-400 to-orange-400',
+  'bg-red-100': 'from-red-400 to-pink-400',
+};
+
+const gradient = colorGradients[color] || 'from-orange-400 to-pink-400';
 ---
 
-<div class="card bg-base-100 shadow-xl hover:-translate-y-2 transition-transform duration-300 group">
-  <div class="card-body">
-    <div class={`w-14 h-14 ${color} rounded-2xl flex items-center justify-center text-3xl mb-4 
-                group-hover:scale-110 transition-transform duration-300`}>
-      {icon}
-    </div>
-    <h3 class="card-title text-xl">{title}</h3>
-    <p class="text-base-content/70 leading-relaxed">{description}</p>
+<div class="feature-card group cursor-pointer">
+  <!-- 图标 -->
+  <div class={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center text-2xl mb-5 
+              shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+    <span class="filter drop-shadow-sm">{icon}</span>
+  </div>
+  
+  <!-- 标题 -->
+  <h3 class="font-bold text-xl text-gray-900 mb-3 group-hover:text-orange-500 transition-colors">
+    {title}
+  </h3>
+  
+  <!-- 描述 -->
+  <p class="text-gray-600 leading-relaxed">
+    {description}
+  </p>
+  
+  <!-- 悬停指示器 -->
+  <div class="mt-4 flex items-center gap-2 text-sm font-medium text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+    <span>了解更多</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
   </div>
 </div>
