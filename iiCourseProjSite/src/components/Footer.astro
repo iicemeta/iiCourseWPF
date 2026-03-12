@@ -1,41 +1,45 @@
 ---
+import { footerConfig } from '../config/footer.config';
+
+const { brand, columns, copyright } = footerConfig;
 ---
 
 <footer class="bg-gray-900 text-white py-12 mt-auto">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- 品牌区域 -->
       <div class="col-span-1 md:col-span-2">
         <div class="flex items-center space-x-2 mb-4">
           <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">ii</span>
+            <span class="text-white font-bold text-sm">{brand.logoText}</span>
           </div>
-          <span class="font-bold text-xl">iiCourse</span>
+          <span class="font-bold text-xl">{brand.name}</span>
         </div>
         <p class="text-gray-400 max-w-sm">
-          智慧校园桌面应用，让教务管理更简单。
+          {brand.tagline}
         </p>
       </div>
       
-      <div>
-        <h4 class="font-semibold mb-4">链接</h4>
-        <ul class="space-y-2 text-gray-400">
-          <li><a href="/features" class="hover:text-white transition-colors">功能介绍</a></li>
-          <li><a href="/updates" class="hover:text-white transition-colors">更新日志</a></li>
-          <li><a href="/news" class="hover:text-white transition-colors">新闻动态</a></li>
-        </ul>
-      </div>
-      
-      <div>
-        <h4 class="font-semibold mb-4">开源</h4>
-        <ul class="space-y-2 text-gray-400">
-          <li><a href="#" class="hover:text-white transition-colors">GitHub</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">问题反馈</a></li>
-        </ul>
-      </div>
+      <!-- 链接列 -->
+      {columns.map((column) => (
+        <div>
+          <h4 class="font-semibold mb-4">{column.title}</h4>
+          <ul class="space-y-2 text-gray-400">
+            {column.links.map((link) => (
+              <li>
+                <a href={link.href} class="hover:text-white transition-colors">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
     
+    <!-- 版权信息 -->
     <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-      © 2026 iiCourse. All rights reserved.
+      {copyright}
     </div>
   </div>
 </footer>
