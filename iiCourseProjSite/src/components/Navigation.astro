@@ -1,13 +1,11 @@
 ---
-const navItems = [
-  { href: '/', label: '首页' },
-  { href: '/features', label: '功能' },
-  { href: '/updates', label: '更新日志' },
-  { href: '/news', label: '新闻' },
-  { href: '/download', label: '下载' },
-];
+import { navigationConfig } from '../config/navigation.config';
 
+const { brand, items, actions } = navigationConfig;
 const currentPath = Astro.url.pathname;
+
+// 获取下载按钮配置
+const downloadAction = actions.find(a => a.variant === 'primary');
 ---
 
 <nav class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-3">
@@ -16,22 +14,72 @@ const currentPath = Astro.url.pathname;
       <!-- Logo -->
       <a href="/" class="flex items-center gap-3 group">
         <div class="relative">
-          <img src="/iiCourse.png" alt="iiCourse" class="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform" />
+          <img src={brand.logo} alt={brand.name} class="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform" />
           <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
         </div>
-        <span class="font-bold text-xl text-gray-900">iiCourse</span>
+        <span class="font-bold text-xl text-gray-900">{brand.name}</span>
       </a>
-      
+
       <!-- 桌面端导航 -->
       <div class="hidden md:flex items-center gap-1">
-        {navItems.map(item => {
+        {items.map(item => {
           const isActive = currentPath === item.href || currentPath.startsWith(item.href + '/');
+          const hasChildren = item.children && item.children.length > 0;
+
+          if (hasChildren) {
+            // 检查是否有子项处于激活状态
+            const isChildActive = item.children?.some(child =>
+              currentPath === child.href || currentPath.startsWith(child.href + '/')
+            );
+
+            return (
+              <div class="relative group">
+                <button
+                  class={`px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-1 ${
+                    isChildActive
+                      ? 'text-orange-500 bg-orange-50'
+                      : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
+                  }`}
+                >
+                  {item.label}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <!-- 下拉菜单 -->
+                <div class="absolute top-full left-0 mt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div class="glass-strong rounded-xl p-2 shadow-xl">
+                    {item.children?.map(child => {
+                      const isChildActive = currentPath === child.href || currentPath.startsWith(child.href + '/');
+                      return (
+                        <a
+                          href={child.href}
+                          target={child.external ? '_blank' : undefined}
+                          rel={child.external ? 'noopener noreferrer' : undefined}
+                          class={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                            isChildActive
+                              ? 'text-orange-500 bg-orange-50'
+                              : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
+                          }`}
+                        >
+                          {child.label}
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
           return (
-            <a 
-              href={item.href} 
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
               class={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
-                isActive 
-                  ? 'text-orange-500 bg-orange-50' 
+                isActive
+                  ? 'text-orange-500 bg-orange-50'
                   : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
               }`}
             >
@@ -40,22 +88,29 @@ const currentPath = Astro.url.pathname;
           );
         })}
       </div>
-      
+
       <!-- 右侧操作区 -->
       <div class="flex items-center gap-3">
-        <!-- 下载按钮 -->
-        <a href="/download" class="hidden md:flex btn btn-primary btn-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          立即下载
-        </a>
-        
+        <!-- 操作按钮 -->
+        {actions.map(action => (
+          <a
+            href={action.href}
+            class={`${action.desktopOnly ? 'hidden md:flex' : 'flex'} btn btn-${action.variant} btn-sm`}
+          >
+            {action.showIcon && (
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            )}
+            {action.label}
+          </a>
+        ))}
+
         <!-- 移动端菜单按钮 -->
-        <button 
-          id="mobile-menu-btn" 
+        <button
+          id="mobile-menu-btn"
           class="md:hidden p-2 rounded-xl hover:bg-orange-50 transition-colors"
           aria-label="打开菜单"
         >
@@ -65,18 +120,65 @@ const currentPath = Astro.url.pathname;
         </button>
       </div>
     </div>
-    
+
     <!-- 移动端菜单 -->
     <div id="mobile-menu" class="hidden md:hidden mt-4 pt-4 border-t border-gray-200/50">
       <div class="flex flex-col gap-2">
-        {navItems.map(item => {
+        {items.map(item => {
           const isActive = currentPath === item.href || currentPath.startsWith(item.href + '/');
+          const hasChildren = item.children && item.children.length > 0;
+
+          if (hasChildren) {
+            const isChildActive = item.children?.some(child =>
+              currentPath === child.href || currentPath.startsWith(child.href + '/')
+            );
+
+            return (
+              <div class="mobile-dropdown">
+                <button
+                  class={`w-full px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-between ${
+                    isChildActive
+                      ? 'text-orange-500 bg-orange-50'
+                      : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
+                  }`}
+                  onclick="this.nextElementSibling.classList.toggle('hidden')"
+                >
+                  <span>{item.label}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="hidden pl-4 mt-1 space-y-1">
+                  {item.children?.map(child => {
+                    const isChildActive = currentPath === child.href || currentPath.startsWith(child.href + '/');
+                    return (
+                      <a
+                        href={child.href}
+                        target={child.external ? '_blank' : undefined}
+                        rel={child.external ? 'noopener noreferrer' : undefined}
+                        class={`block px-4 py-2 rounded-lg font-medium transition-all ${
+                          isChildActive
+                            ? 'text-orange-500 bg-orange-50'
+                            : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
+                        }`}
+                      >
+                        {child.label}
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          }
+
           return (
-            <a 
-              href={item.href} 
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
               class={`px-4 py-3 rounded-xl font-medium transition-all ${
-                isActive 
-                  ? 'text-orange-500 bg-orange-50' 
+                isActive
+                  ? 'text-orange-500 bg-orange-50'
                   : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50/50'
               }`}
             >
@@ -84,14 +186,16 @@ const currentPath = Astro.url.pathname;
             </a>
           );
         })}
-        <a href="/download" class="btn btn-primary mt-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          立即下载
-        </a>
+        {downloadAction && (
+          <a href={downloadAction.href} class="btn btn-primary mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            {downloadAction.label}
+          </a>
+        )}
       </div>
     </div>
   </div>
@@ -101,26 +205,26 @@ const currentPath = Astro.url.pathname;
   // 移动端菜单切换
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
-  
+
   if (mobileMenuBtn && mobileMenu) {
     mobileMenuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
     });
   }
-  
+
   // 滚动时导航栏效果
   let lastScroll = 0;
   const nav = document.querySelector('nav');
-  
+
   window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
-    
+
     if (currentScroll > 100) {
       nav?.classList.add('nav-scrolled');
     } else {
       nav?.classList.remove('nav-scrolled');
     }
-    
+
     lastScroll = currentScroll;
   });
 </script>
@@ -131,7 +235,7 @@ const currentPath = Astro.url.pathname;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
-  
+
   .nav-scrolled > div {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }

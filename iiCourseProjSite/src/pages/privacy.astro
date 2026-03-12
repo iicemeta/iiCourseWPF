@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+const lastUpdated = '2025年3月12日';
+
+const sections = [
+  {
+    id: 'intro',
+    title: '我们是谁',
+    content: 'iiCourse 是一个开源的智慧校园桌面应用，由学生团队开发维护。我们重视你的隐私，就像重视自己的成绩一样认真。'
+  },
+  {
+    id: 'collect',
+    title: '我们收集什么',
+    content: '说实话，我们收集的东西少得可怜：',
+    list: [
+      '你的学号和密码（仅用于登录教务系统）',
+      '课表、成绩等教务数据（仅缓存在本地）',
+      '应用崩溃日志（帮助我们修复 bug）'
+    ]
+  },
+  {
+    id: 'not-collect',
+    title: '我们绝不收集',
+    content: '以下这些东西，给我们钱我们都不碰：',
+    list: [
+      '你的浏览记录',
+      '你的聊天记录',
+      '你的个人文件',
+      '你的支付信息'
+    ]
+  },
+  {
+    id: 'storage',
+    title: '数据存储在哪',
+    content: '所有数据都存储在你的电脑本地。我们不会把数据上传到任何服务器——因为我们根本没有服务器。'
+  },
+  {
+    id: 'security',
+    title: '安全措施',
+    content: '我们使用 DES 加密存储你的登录凭证。虽然不是什么军用级加密，但对付一般的窥探足够了。记住：不要把密码设成 123456。'
+  },
+  {
+    id: 'third-party',
+    title: '第三方服务',
+    content: '应用内嵌了学校官方的教务系统页面。这些页面受学校管理，我们不控制它们的隐私政策。'
+  },
+  {
+    id: 'changes',
+    title: '政策变更',
+    content: '如果我们改了隐私政策，会在更新日志里说明。继续使用应用即表示你同意新政策。'
+  },
+  {
+    id: 'contact',
+    title: '联系我们',
+    content: '对隐私政策有疑问？加入我们的 Telegram 群组，或者直接去 GitHub 提 Issue。'
+  }
+];
+---
+
+<Layout title="隐私政策" description="iiCourse 隐私政策 - 我们如何处理你的数据">
+  <Navigation />
+  
+  <main class="relative z-10 flex-1">
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-orange-400/10 via-pink-400/5 to-purple-400/10"></div>
+      
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div class="text-center">
+          <span class="badge badge-glass mb-4">Legal Stuff</span>
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            隐私政策
+          </h1>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            简单明了，没有法律术语
+          </p>
+          <p class="text-sm text-gray-500 mt-4">
+            最后更新：{lastUpdated}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content -->
+    <section class="py-12 pb-24">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-panel p-8 md:p-12 space-y-12">
+          {sections.map((section, index) => (
+            <div class="policy-section" id={section.id}>
+              <div class="flex items-start gap-4">
+                <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-pink-400 flex items-center justify-center text-white font-bold text-sm">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <div class="flex-1">
+                  <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                    {section.title}
+                  </h2>
+                  <p class="text-gray-600 leading-relaxed mb-4">
+                    {section.content}
+                  </p>
+                  {section.list && (
+                    <ul class="space-y-2">
+                      {section.list.map(item => (
+                        <li class="flex items-start gap-3 text-gray-600">
+                          <span class="w-1.5 h-1.5 rounded-full bg-orange-400 mt-2 flex-shrink-0"></span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <!-- Summary Box -->
+          <div class="mt-12 p-6 rounded-2xl bg-gradient-to-br from-orange-50 to-pink-50 border border-orange-200">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 mb-2">一句话总结</h3>
+                <p class="text-gray-600">
+                  我们不收集敏感数据，不追踪你的行为，不卖给第三方。你的数据只属于你自己。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back Link -->
+        <div class="mt-8 text-center">
+          <a href="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-orange-500 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            返回首页
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style>
+  .policy-section:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 2rem;
+  }
+</style>
