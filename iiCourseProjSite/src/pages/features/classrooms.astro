@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import ClassroomList from '../../components/classrooms/ClassroomList.vue';
+---
+
+<Layout title="空教室查询演示" description="查看空教室查询功能演示">
+  <Navigation />
+  
+  <main class="pt-24 pb-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- 面包屑 -->
+      <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-8">
+        <a href="/" class="hover:text-primary">首页</a>
+        <span>/</span>
+        <a href="/features" class="hover:text-primary">功能</a>
+        <span>/</span>
+        <span class="text-gray-900">空教室</span>
+      </nav>
+      
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">🏫 空教室查询</h1>
+        <p class="text-lg text-gray-600">
+          查找空闲教室，支持按教学楼、日期、节次筛选。自习好去处，一键找到。
+        </p>
+      </div>
+      
+      <!-- 功能亮点 -->
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-green-50 rounded-xl p-4 border border-green-100">
+          <div class="text-2xl mb-2">🔍</div>
+          <h3 class="font-semibold text-gray-900">快速查找</h3>
+          <p class="text-sm text-gray-600">多条件筛选，精准定位</p>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <div class="text-2xl mb-2">🏢</div>
+          <h3 class="font-semibold text-gray-900">教学楼筛选</h3>
+          <p class="text-sm text-gray-600">按教学楼快速定位</p>
+        </div>
+        <div class="bg-orange-50 rounded-xl p-4 border border-orange-100">
+          <div class="text-2xl mb-2">⏰</div>
+          <h3 class="font-semibold text-gray-900">节次选择</h3>
+          <p class="text-sm text-gray-600">精确到具体时间段</p>
+        </div>
+      </div>
+      
+      <!-- 空教室列表组件 -->
+      <ClassroomList client:load />
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

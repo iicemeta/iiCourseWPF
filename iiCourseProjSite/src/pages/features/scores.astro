@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import ScoreTable from '../../components/scores/ScoreTable.vue';
+---
+
+<Layout title="成绩查询演示" description="查看成绩查询功能演示">
+  <Navigation />
+  
+  <main class="pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- 面包屑 -->
+      <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-8">
+        <a href="/" class="hover:text-primary">首页</a>
+        <span>/</span>
+        <a href="/features" class="hover:text-primary">功能</a>
+        <span>/</span>
+        <span class="text-gray-900">成绩查询</span>
+      </nav>
+      
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">📊 成绩查询</h1>
+        <p class="text-lg text-gray-600">
+          查询各科成绩，自动计算 GPA。支持按学年、学期筛选，成绩分布一目了然。
+        </p>
+      </div>
+      
+      <!-- 功能亮点 -->
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <div class="text-2xl mb-2">📈</div>
+          <h3 class="font-semibold text-gray-900">自动计算</h3>
+          <p class="text-sm text-gray-600">自动计算 GPA 和平均分</p>
+        </div>
+        <div class="bg-green-50 rounded-xl p-4 border border-green-100">
+          <div class="text-2xl mb-2">🎨</div>
+          <h3 class="font-semibold text-gray-900">颜色标识</h3>
+          <p class="text-sm text-gray-600">不同分数段用颜色区分</p>
+        </div>
+        <div class="bg-purple-50 rounded-xl p-4 border border-purple-100">
+          <div class="text-2xl mb-2">📅</div>
+          <h3 class="font-semibold text-gray-900">学年筛选</h3>
+          <p class="text-sm text-gray-600">支持多学年成绩查看</p>
+        </div>
+      </div>
+      
+      <!-- 成绩表格组件 -->
+      <ScoreTable client:load />
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

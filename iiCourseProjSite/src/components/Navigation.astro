@@ -1,0 +1,40 @@
+---
+const navItems = [
+  { href: '/', label: '首页' },
+  { href: '/features', label: '功能' },
+  { href: '/changelog', label: '更新日志' },
+  { href: '/news', label: '新闻' },
+  { href: '/download', label: '下载' },
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center space-x-2 flex-shrink-0">
+        <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">ii</span>
+        </div>
+        <span class="font-bold text-xl text-gray-900">iiCourse</span>
+      </a>
+      
+      <!-- Navigation Links -->
+      <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+        {navItems.map(item => (
+          <a 
+            href={item.href}
+            class="text-gray-600 hover:text-primary font-medium transition-colors whitespace-nowrap"
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+      
+      <!-- Download Button -->
+      <a href="/download" class="btn-primary text-sm flex-shrink-0">
+        立即下载
+      </a>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+const features = [
+  { 
+    title: '课程表查询', 
+    description: '查看完整课表，支持按学年、学期、周次筛选',
+    icon: '📅',
+    href: '/features/schedule',
+    color: 'from-orange-400 to-red-500'
+  },
+  { 
+    title: '成绩查询', 
+    description: '查询各科成绩，自动计算 GPA',
+    icon: '📊',
+    href: '/features/scores',
+    color: 'from-blue-400 to-cyan-500'
+  },
+  { 
+    title: '空教室查询', 
+    description: '查找空闲教室，支持按教学楼筛选',
+    icon: '🏫',
+    href: '/features/classrooms',
+    color: 'from-green-400 to-emerald-500'
+  },
+  { 
+    title: '用户信息', 
+    description: '查看个人资料和一卡通信息',
+    icon: '👤',
+    href: '/features/profile',
+    color: 'from-purple-400 to-pink-500'
+  },
+];
+---
+
+<Layout title="功能展示" description="探索 iiCourse 的各项功能">
+  <Navigation />
+  
+  <main class="pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h1 class="section-title mb-4">功能<span class="gradient-text">演示</span></h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          下面是应用的核心功能展示，使用示例数据模拟真实界面
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        {features.map(feature => (
+          <a href={feature.href} class="group block">
+            <div class="card h-full hover:shadow-2xl transition-all duration-300">
+              <div class={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center 
+                          text-4xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                {feature.icon}
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+              <p class="text-gray-600 text-lg">{feature.description}</p>
+              <div class="mt-6 flex items-center text-primary font-semibold">
+                查看演示
+                <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

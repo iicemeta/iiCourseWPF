@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import HeroSection from '../components/HeroSection.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+
+const features = [
+  { icon: '📅', title: '课程表查询', description: '查看本周课表，支持多周切换，课程信息一目了然', color: 'bg-orange-100' },
+  { icon: '📊', title: '成绩查询', description: '快速查询各科成绩，自动计算 GPA，学年筛选', color: 'bg-blue-100' },
+  { icon: '🏫', title: '空教室查询', description: '查找空闲教室，自习好去处，按教学楼筛选', color: 'bg-green-100' },
+  { icon: '💳', title: '一卡通余额', description: '实时查询一卡通余额和消费记录', color: 'bg-purple-100' },
+  { icon: '⭐', title: '一键评教', description: '快速完成学生评教，告别繁琐操作', color: 'bg-yellow-100' },
+  { icon: '🔐', title: 'CAS 登录', description: '支持智慧山商统一认证，安全便捷', color: 'bg-red-100' },
+];
+---
+
+<Layout title="首页" description="iiCourse - 智慧校园桌面应用，课表成绩一手掌握">
+  <Navigation />
+  
+  <main>
+    <HeroSection />
+    
+    <!-- 功能展示 -->
+    <section class="py-24 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="section-title mb-4">功能齐全，<span class="gradient-text">简单好用</span></h2>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            六大核心功能，覆盖教务管理方方面面
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map(feature => (
+            <FeatureCard {...feature} />
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTA 区域 -->
+    <section class="py-24 bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+      <div class="absolute inset-0 bg-black/10"></div>
+      <div class="relative max-w-4xl mx-auto px-4 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+          准备好体验了吗？
+        </h2>
+        <p class="text-xl text-white/90 mb-8">
+          完全免费，开源透明，立即下载开始使用
+        </p>
+        <a href="/download" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary font-bold rounded-xl
+                 hover:bg-gray-100 transition-colors shadow-lg">
+          立即下载 v1.7.200
+        </a>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>

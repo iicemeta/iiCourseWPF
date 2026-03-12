@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import ScheduleTable from '../../components/schedule/ScheduleTable.vue';
+---
+
+<Layout title="课程表演示" description="查看课程表功能演示">
+  <Navigation />
+  
+  <main class="pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- 面包屑 -->
+      <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-8">
+        <a href="/" class="hover:text-primary">首页</a>
+        <span>/</span>
+        <a href="/features" class="hover:text-primary">功能</a>
+        <span>/</span>
+        <span class="text-gray-900">课程表</span>
+      </nav>
+      
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">📅 课程表</h1>
+        <p class="text-lg text-gray-600">
+          查看本周课程安排，支持按周次切换。不同课程使用不同颜色区分，一目了然。
+        </p>
+      </div>
+      
+      <!-- 功能亮点 -->
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-orange-50 rounded-xl p-4 border border-orange-100">
+          <div class="text-2xl mb-2">🎨</div>
+          <h3 class="font-semibold text-gray-900">颜色区分</h3>
+          <p class="text-sm text-gray-600">不同课程不同颜色，快速识别</p>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <div class="text-2xl mb-2">📆</div>
+          <h3 class="font-semibold text-gray-900">周次切换</h3>
+          <p class="text-sm text-gray-600">支持 1-20 周自由切换</p>
+        </div>
+        <div class="bg-green-50 rounded-xl p-4 border border-green-100">
+          <div class="text-2xl mb-2">ℹ️</div>
+          <h3 class="font-semibold text-gray-900">详细信息</h3>
+          <p class="text-sm text-gray-600">显示教室、教师等完整信息</p>
+        </div>
+      </div>
+      
+      <!-- 课程表组件 -->
+      <ScheduleTable client:load />
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

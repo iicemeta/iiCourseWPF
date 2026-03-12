@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title="新闻动态" description="iiCourse 最新资讯和博客文章">
+  <Navigation />
+  
+  <main class="pt-24 pb-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- 页面标题 -->
+      <div class="text-center mb-16">
+        <h1 class="section-title mb-4">📰 新闻<span class="gradient-text">动态</span></h1>
+        <p class="text-xl text-gray-600">
+          最新资讯、开发日志和使用技巧
+        </p>
+      </div>
+      
+      <!-- 文章列表 -->
+      <div class="space-y-8">
+        {sortedPosts.map((post) => (
+          <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <a href={`/news/${post.id}`} class="block p-8">
+              <div class="flex items-center space-x-4 mb-4">
+                <span class="text-sm text-gray-500">
+                  {post.data.pubDate.toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </span>
+                <span class="text-gray-300">·</span>
+                <span class="text-sm text-gray-500">{post.data.author}</span>
+              </div>
+              
+              <h2 class="text-2xl font-bold text-gray-900 mb-3 hover:text-primary transition-colors">
+                {post.data.title}
+              </h2>
+              
+              <p class="text-gray-600 mb-4 line-clamp-2">
+                {post.data.description}
+              </p>
+              
+              {post.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                  {post.data.tags.map((tag) => (
+                    <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>
