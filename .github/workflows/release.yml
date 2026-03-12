@@ -113,7 +113,7 @@ jobs:
             -p:PublishSingleFile=true `
             -p:IncludeNativeLibrariesForSelfExtract=true
 
-      # 发布框架依赖应用 (x64)
+      # 发布框架依赖应用 (x64) - 单文件，包含运行时文件
       - name: 发布应用 (x64 框架依赖)
         run: |
           dotnet publish ${{ env.MAIN_PROJECT }} `
@@ -122,6 +122,14 @@ jobs:
             --self-contained false `
             --output ./publish/x64-framework `
             -p:PublishSingleFile=true
+
+      # 发布纯框架依赖应用 - 需要本地安装 .NET 9
+      - name: 发布应用 (纯框架依赖 - 需安装.NET 9)
+        run: |
+          dotnet publish ${{ env.MAIN_PROJECT }} `
+            --configuration Release `
+            --self-contained false `
+            --output ./publish/dotnet9-required
 
       # 打包自包含版本
       - name: 打包自包含版本
@@ -136,6 +144,13 @@ jobs:
         run: |
           $version = '${{ steps.version.outputs.version }}'
           Compress-Archive -Path ./publish/x64-framework/* -DestinationPath "./iiCourseWPF-v$version-win-x64-framework.zip" -Force
+
+      # 打包纯框架依赖版本 (需安装 .NET 9)
+      - name: 打包纯框架依赖版本
+        shell: pwsh
+        run: |
+          $version = '${{ steps.version.outputs.version }}'
+          Compress-Archive -Path ./publish/dotnet9-required/* -DestinationPath "./iiCourseWPF-v$version-dotnet9-required.zip" -Force
 
       # 上传构建产物
       - name: 上传构建产物
@@ -180,6 +195,7 @@ jobs:
             |------|------|----------|
             | 自包含版本 | 无需安装 .NET 9 运行时 | ~50MB |
             | 框架依赖版本 | 需要安装 .NET 9 运行时 | ~5MB |
+            | 纯框架依赖版本 | 必须安装 .NET 9 运行时，体积最小 | ~200KB |
 
             ### 安装说明
 
@@ -193,6 +209,13 @@ jobs:
             2. 下载 `iiCourseWPF-v${{ needs.build.outputs.version }}-win-x64-framework.zip`
             3. 解压到任意文件夹
             4. 运行 `iiCourseWPF.exe`
+
+            **纯框架依赖版本 (体积最小)**
+            1. 先安装 [.NET 9.0 运行时](https://dotnet.microsoft.com/download/dotnet/9.0)
+            2. 下载 `iiCourseWPF-v${{ needs.build.outputs.version }}-dotnet9-required.zip`
+            3. 解压到任意文件夹
+            4. 运行 `iiCourseWPF.exe`
+            > ⚠️ 此版本不包含任何运行时文件，必须确保系统已安装 .NET 9
 
             ### 校验
 
