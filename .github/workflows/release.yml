@@ -1,0 +1,242 @@
+# GitHub Actions Release Workflow for iiCourseWPF
+# 触发方式: 推送标签 v* 或手动触发
+
+name: Release iiCourseWPF
+
+on:
+  # 当推送版本标签时触发 (例如: v1.0.0)
+  push:
+    tags:
+      - 'v*'
+  # 允许手动触发
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '版本号 (例如: 1.8.0)'
+        required: true
+        default: '1.8.0'
+      prerelease:
+        description: '是否为预发布版本'
+        type: boolean
+        required: false
+        default: false
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  SOLUTION_PATH: 'iiCourseWPF.sln'
+  MAIN_PROJECT: 'iiCourseWPF/iiCourseWPF.csproj'
+
+jobs:
+  # 构建和测试
+  build:
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      assembly_version: ${{ steps.version.outputs.assembly_version }}
+
+    steps:
+      # 检出代码
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 设置 .NET 9.0
+      - name: 设置 .NET ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      # 提取版本号
+      - name: 提取版本号
+        id: version
+        shell: pwsh
+        run: |
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            $version = '${{ github.event.inputs.version }}'
+          } else {
+            $tag = '${{ github.ref_name }}'
+            $version = $tag -replace '^v', ''
+          }
+          $assemblyVersion = "$version.0"
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+          echo "assembly_version=$assemblyVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "版本: $version"
+          Write-Host "程序集版本: $assemblyVersion"
+
+      # 还原 NuGet 包
+      - name: 还原 NuGet 包
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      # 更新项目版本号
+      - name: 更新版本号
+        shell: pwsh
+        run: |
+          $version = '${{ steps.version.outputs.version }}'
+          $assemblyVersion = '${{ steps.version.outputs.assembly_version }}'
+
+          # 更新主项目
+          $mainProject = '${{ env.MAIN_PROJECT }}'
+          [xml]$xml = Get-Content $mainProject
+          $xml.Project.PropertyGroup.Version = $version
+          $xml.Project.PropertyGroup.AssemblyVersion = $assemblyVersion
+          $xml.Project.PropertyGroup.FileVersion = $assemblyVersion
+          $xml.Save($mainProject)
+
+          # 更新 Core 项目
+          $coreProject = 'iiCourse.Core/iiCourse.Core.csproj'
+          [xml]$xml = Get-Content $coreProject
+          $xml.Project.PropertyGroup.Version = $version
+          $xml.Project.PropertyGroup.AssemblyVersion = $assemblyVersion
+          $xml.Project.PropertyGroup.FileVersion = $assemblyVersion
+          $xml.Save($coreProject)
+
+          Write-Host "版本号已更新为: $version"
+
+      # 构建项目 (Release 配置)
+      - name: 构建项目
+        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
+
+      # 运行测试 (如果有测试项目)
+      - name: 运行测试
+        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-build --verbosity normal
+        continue-on-error: true
+
+      # 发布自包含应用 (x64)
+      - name: 发布应用 (x64 自包含)
+        run: |
+          dotnet publish ${{ env.MAIN_PROJECT }} `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            --output ./publish/x64 `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true
+
+      # 发布框架依赖应用 (x64)
+      - name: 发布应用 (x64 框架依赖)
+        run: |
+          dotnet publish ${{ env.MAIN_PROJECT }} `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained false `
+            --output ./publish/x64-framework `
+            -p:PublishSingleFile=true
+
+      # 打包自包含版本
+      - name: 打包自包含版本
+        shell: pwsh
+        run: |
+          $version = '${{ steps.version.outputs.version }}'
+          Compress-Archive -Path ./publish/x64/* -DestinationPath "./iiCourseWPF-v$version-win-x64-self-contained.zip" -Force
+
+      # 打包框架依赖版本
+      - name: 打包框架依赖版本
+        shell: pwsh
+        run: |
+          $version = '${{ steps.version.outputs.version }}'
+          Compress-Archive -Path ./publish/x64-framework/* -DestinationPath "./iiCourseWPF-v$version-win-x64-framework.zip" -Force
+
+      # 上传构建产物
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            ./iiCourseWPF-v*.zip
+          retention-days: 30
+
+  # 创建 GitHub Release
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      # 下载构建产物
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: ./artifacts
+
+      # 列出构建产物
+      - name: 列出构建产物
+        run: ls -la ./artifacts
+
+      # 创建 Release
+      - name: 创建 GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.ref_name }}
+          name: ${{ github.event_name == 'workflow_dispatch' && format('iiCourseWPF v{0}', github.event.inputs.version) || format('iiCourseWPF {0}', github.ref_name) }}
+          body: |
+            ## iiCourseWPF ${{ needs.build.outputs.version }}
+
+            ### 下载
+
+            | 版本 | 说明 | 文件大小 |
+            |------|------|----------|
+            | 自包含版本 | 无需安装 .NET 9 运行时 | ~50MB |
+            | 框架依赖版本 | 需要安装 .NET 9 运行时 | ~5MB |
+
+            ### 安装说明
+
+            **自包含版本 (推荐)**
+            1. 下载 `iiCourseWPF-v${{ needs.build.outputs.version }}-win-x64-self-contained.zip`
+            2. 解压到任意文件夹
+            3. 运行 `iiCourseWPF.exe`
+
+            **框架依赖版本**
+            1. 先安装 [.NET 9.0 运行时](https://dotnet.microsoft.com/download/dotnet/9.0)
+            2. 下载 `iiCourseWPF-v${{ needs.build.outputs.version }}-win-x64-framework.zip`
+            3. 解压到任意文件夹
+            4. 运行 `iiCourseWPF.exe`
+
+            ### 校验
+
+            文件 SHA256 校验和可在发布页面查看。
+
+            ---
+            **完整更新日志**: 参见 [CHANGELOG.md](./docs/changelog.md)
+          files: ./artifacts/*.zip
+          prerelease: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.prerelease || false }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # 生成校验和
+  checksum:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      # 检出代码
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      # 下载构建产物
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: ./artifacts
+
+      # 生成校验和文件
+      - name: 生成 SHA256 校验和
+        run: |
+          cd ./artifacts
+          sha256sum *.zip > checksums.txt
+          cat checksums.txt
+
+      # 上传校验和到 Release
+      - name: 上传校验和
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.ref_name }}
+          files: ./artifacts/checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
