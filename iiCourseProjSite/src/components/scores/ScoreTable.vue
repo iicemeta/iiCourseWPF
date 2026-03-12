@@ -1,35 +1,43 @@
 <template>
-  <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+  <div class="card bg-base-100 shadow-xl overflow-hidden">
     <!-- 统计卡片 -->
-    <div class="p-6 border-b border-gray-100">
+    <div class="card-body border-b border-base-300">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-gradient-to-br from-primary to-secondary rounded-xl p-4 text-white">
-          <div class="text-sm opacity-80">本学期绩点</div>
-          <div class="text-3xl font-bold">3.85</div>
+        <div class="card bg-gradient-to-br from-primary to-secondary text-white">
+          <div class="card-body p-4">
+            <div class="text-sm opacity-80">本学期绩点</div>
+            <div class="text-3xl font-bold">3.85</div>
+          </div>
         </div>
-        <div class="bg-blue-50 rounded-xl p-4">
-          <div class="text-sm text-blue-600">平均分</div>
-          <div class="text-3xl font-bold text-blue-700">87.5</div>
+        <div class="card bg-blue-50 border border-blue-200">
+          <div class="card-body p-4">
+            <div class="text-sm text-blue-600">平均分</div>
+            <div class="text-3xl font-bold text-blue-700">87.5</div>
+          </div>
         </div>
-        <div class="bg-green-50 rounded-xl p-4">
-          <div class="text-sm text-green-600">已修学分</div>
-          <div class="text-3xl font-bold text-green-700">86</div>
+        <div class="card bg-green-50 border border-green-200">
+          <div class="card-body p-4">
+            <div class="text-sm text-green-600">已修学分</div>
+            <div class="text-3xl font-bold text-green-700">86</div>
+          </div>
         </div>
-        <div class="bg-purple-50 rounded-xl p-4">
-          <div class="text-sm text-purple-600">课程数</div>
-          <div class="text-3xl font-bold text-purple-700">24</div>
+        <div class="card bg-purple-50 border border-purple-200">
+          <div class="card-body p-4">
+            <div class="text-sm text-purple-600">课程数</div>
+            <div class="text-3xl font-bold text-purple-700">24</div>
+          </div>
         </div>
       </div>
     </div>
     
     <!-- 筛选器 -->
-    <div class="p-4 border-b border-gray-100 flex flex-wrap items-center gap-4">
-      <select v-model="selectedYear" class="px-4 py-2 border border-gray-200 rounded-lg">
+    <div class="card-body py-4 border-b border-base-300 flex flex-wrap items-center gap-4">
+      <select v-model="selectedYear" class="select select-bordered select-sm">
         <option value="all">全部学年</option>
         <option value="2024-2025">2024-2025</option>
         <option value="2023-2024">2023-2024</option>
       </select>
-      <select v-model="selectedSemester" class="px-4 py-2 border border-gray-200 rounded-lg">
+      <select v-model="selectedSemester" class="select select-bordered select-sm">
         <option value="all">全部学期</option>
         <option value="1">第一学期</option>
         <option value="2">第二学期</option>
@@ -38,31 +46,31 @@
     
     <!-- 成绩表格 -->
     <div class="overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">课程名称</th>
-            <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700">学分</th>
-            <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700">成绩</th>
-            <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700">绩点</th>
-            <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700">性质</th>
+      <table class="table table-zebra w-full">
+        <thead>
+          <tr class="bg-base-200">
+            <th class="py-3 px-4 text-left text-sm font-semibold text-base-content">课程名称</th>
+            <th class="py-3 px-4 text-center text-sm font-semibold text-base-content">学分</th>
+            <th class="py-3 px-4 text-center text-sm font-semibold text-base-content">成绩</th>
+            <th class="py-3 px-4 text-center text-sm font-semibold text-base-content">绩点</th>
+            <th class="py-3 px-4 text-center text-sm font-semibold text-base-content">性质</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100">
-          <tr v-for="score in filteredScores" :key="score.name" class="hover:bg-gray-50">
+        <tbody class="divide-y divide-base-300">
+          <tr v-for="score in filteredScores" :key="score.name" class="hover:bg-base-200">
             <td class="py-4 px-4">
-              <div class="font-medium text-gray-900">{{ score.name }}</div>
-              <div class="text-sm text-gray-500">{{ score.semester }}</div>
+              <div class="font-medium text-base-content">{{ score.name }}</div>
+              <div class="text-sm text-base-content/50">{{ score.semester }}</div>
             </td>
-            <td class="py-4 px-4 text-center text-gray-700">{{ score.credit }}</td>
+            <td class="py-4 px-4 text-center text-base-content">{{ score.credit }}</td>
             <td class="py-4 px-4 text-center">
-              <span :class="['px-3 py-1 rounded-full text-sm font-semibold', getScoreClass(score.score)]">
+              <span :class="['badge', getScoreClass(score.score)]">
                 {{ score.score }}
               </span>
             </td>
-            <td class="py-4 px-4 text-center text-gray-700">{{ score.gpa }}</td>
+            <td class="py-4 px-4 text-center text-base-content">{{ score.gpa }}</td>
             <td class="py-4 px-4 text-center">
-              <span class="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">
+              <span class="badge badge-ghost badge-sm">
                 {{ score.nature }}
               </span>
             </td>
@@ -97,9 +105,9 @@ const filteredScores = computed(() => {
 });
 
 function getScoreClass(score: number) {
-  if (score >= 90) return 'bg-green-100 text-green-700';
-  if (score >= 80) return 'bg-blue-100 text-blue-700';
-  if (score >= 70) return 'bg-yellow-100 text-yellow-700';
-  return 'bg-red-100 text-red-700';
+  if (score >= 90) return 'badge-success';
+  if (score >= 80) return 'badge-info';
+  if (score >= 70) return 'badge-warning';
+  return 'badge-error';
 }
 </script>

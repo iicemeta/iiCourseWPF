@@ -21,7 +21,7 @@ import Footer from '../components/Footer.astro';
 
       <!-- 404 数字背景 -->
       <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-        <span class="text-[20rem] md:text-[30rem] font-black text-gray-100/50">404</span>
+        <span class="text-[20rem] md:text-[30rem] font-black text-base-content/5">404</span>
       </div>
     </div>
 
@@ -45,12 +45,12 @@ import Footer from '../components/Footer.astro';
       </h1>
 
       <!-- 副标题 -->
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-base-content mb-4">
         页面走丢了
       </h2>
 
       <!-- 描述 -->
-      <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">
+      <p class="text-lg text-base-content/70 mb-8 max-w-md mx-auto">
         抱歉，您访问的页面不存在或已被移除。
         <br>
         就像忘记带课本一样尴尬 😅
@@ -58,15 +58,15 @@ import Footer from '../components/Footer.astro';
 
       <!-- 操作按钮 -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/" class="btn-primary text-lg px-8 py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="/" class="btn btn-primary btn-lg gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
             <polyline points="9 22 9 12 15 12 15 22"></polyline>
           </svg>
           返回首页
         </a>
-        <a href="/features" class="btn-secondary text-lg px-8 py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="/features" class="btn btn-outline btn-lg gap-2 border-primary text-primary hover:bg-primary hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
             <polyline points="2 17 12 22 22 17"></polyline>
             <polyline points="2 12 12 17 22 12"></polyline>
@@ -76,8 +76,8 @@ import Footer from '../components/Footer.astro';
       </div>
 
       <!-- 趣味提示 -->
-      <div class="mt-12 p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100">
-        <p class="text-gray-500 text-sm">
+      <div class="mt-12 p-6 bg-base-100/80 backdrop-blur-sm rounded-2xl shadow-lg border border-base-300">
+        <p class="text-base-content/50 text-sm">
           💡 提示：您也可以尝试使用导航栏查找所需内容
         </p>
       </div>

@@ -8,7 +8,7 @@ const changelog = [
     version: '1.7.200',
     date: '2026-03-11',
     tag: '最新版本',
-    tagColor: 'bg-green-100 text-green-700',
+    tagColor: 'badge-success',
     features: [
       { icon: '🔐', title: 'CAS 登录', desc: '支持智慧山商统一认证' },
       { icon: '👤', title: '用户信息', desc: '查询个人资料和校园卡信息' },
@@ -40,7 +40,7 @@ const roadmap = [
       <!-- 页面标题 -->
       <div class="text-center mb-16">
         <h1 class="section-title mb-4">📋 更新<span class="gradient-text">日志</span></h1>
-        <p class="text-xl text-gray-600">
+        <p class="text-xl text-base-content/70">
           记录 iiCourse 的每一次成长
         </p>
       </div>
@@ -50,36 +50,38 @@ const roadmap = [
         {changelog.map((release) => (
           <div class="relative">
             <!-- 版本标题 -->
-            <div class="flex items-center space-x-4 mb-6">
+            <div class="flex items-center gap-4 mb-6">
               <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
                 v
               </div>
               <div>
-                <div class="flex items-center space-x-3">
-                  <h2 class="text-2xl font-bold text-gray-900">{release.version}</h2>
-                  <span class={`px-3 py-1 rounded-full text-sm font-medium ${release.tagColor}`}>
+                <div class="flex items-center gap-3">
+                  <h2 class="text-2xl font-bold text-base-content">{release.version}</h2>
+                  <span class={`badge ${release.tagColor}`}>
                     {release.tag}
                   </span>
                 </div>
-                <p class="text-gray-500">{release.date}</p>
+                <p class="text-base-content/50">{release.date}</p>
               </div>
             </div>
             
             <!-- 功能列表 -->
-            <div class="bg-white rounded-2xl shadow-lg p-8">
-              <h3 class="text-lg font-semibold text-gray-900 mb-6">✨ 新增功能</h3>
-              <div class="grid md:grid-cols-2 gap-6">
-                {release.features.map((feature) => (
-                  <div class="flex items-start space-x-4">
-                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
-                      {feature.icon}
+            <div class="card bg-base-100 shadow-lg">
+              <div class="card-body">
+                <h3 class="text-lg font-semibold text-base-content mb-6">✨ 新增功能</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                  {release.features.map((feature) => (
+                    <div class="flex items-start gap-4">
+                      <div class="w-12 h-12 bg-base-200 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                        {feature.icon}
+                      </div>
+                      <div>
+                        <h4 class="font-semibold text-base-content">{feature.title}</h4>
+                        <p class="text-sm text-base-content/70">{feature.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 class="font-semibold text-gray-900">{feature.title}</h4>
-                      <p class="text-sm text-gray-600">{feature.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -88,19 +90,18 @@ const roadmap = [
       
       <!-- 开发路线图 -->
       <div class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">🗺️ 开发路线图</h2>
-        <div class="bg-white rounded-2xl shadow-lg p-8">
-          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {roadmap.map((item) => (
-              <div class="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
-                <div class="w-3 h-3 rounded-full bg-gray-300"></div>
-                <span class="text-gray-700">{item.title}</span>
-              </div>
-            ))}
+        <h2 class="text-2xl font-bold text-base-content mb-8 text-center">🗺️ 开发路线图</h2>
+        <div class="card bg-base-100 shadow-lg">
+          <div class="card-body">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {roadmap.map((item) => (
+                <div class="flex items-center gap-3 p-4 bg-base-200 rounded-xl">
+                  <div class="w-3 h-3 rounded-full bg-base-content/30"></div>
+                  <span class="text-base-content/70">{item.title}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <p class="text-center text-gray-500 mt-6 text-sm">
-            更多功能开发中，敬请期待...
-          </p>
         </div>
       </div>
     </div>

@@ -1,21 +1,21 @@
 <template>
-  <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+  <div class="card bg-base-100 shadow-xl overflow-hidden">
     <!-- 工具栏 -->
-    <div class="p-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center space-x-4">
-        <select v-model="selectedWeek" class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary">
+    <div class="card-body py-4 border-b border-base-300 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <select v-model="selectedWeek" class="select select-bordered select-sm">
           <option v-for="week in 20" :key="week" :value="week">第 {{ week }} 周</option>
         </select>
-        <span class="text-gray-500">2024-2025学年 第2学期</span>
+        <span class="text-base-content/50 text-sm">2024-2025学年 第2学期</span>
       </div>
-      <div class="text-sm text-gray-500">
+      <div class="text-sm text-base-content/50">
         {{ dateRange }}
       </div>
     </div>
     
     <!-- 课程表 -->
     <div class="overflow-x-auto">
-      <table class="w-full min-w-[800px]">
+      <table class="table table-zebra w-full min-w-[800px]">
         <thead>
           <tr class="bg-gradient-to-r from-primary to-secondary text-white">
             <th class="py-4 px-2 w-20">节次</th>
@@ -26,10 +26,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="period in periods" :key="period.num" class="border-b border-gray-100">
-            <td class="py-4 px-2 text-center bg-gray-50">
-              <div class="font-semibold text-gray-700">{{ period.num }}</div>
-              <div class="text-xs text-gray-400">{{ period.time }}</div>
+          <tr v-for="period in periods" :key="period.num" class="border-b border-base-300">
+            <td class="py-4 px-2 text-center bg-base-200">
+              <div class="font-semibold text-base-content">{{ period.num }}</div>
+              <div class="text-xs text-base-content/50">{{ period.time }}</div>
             </td>
             <td 
               v-for="day in weekdays" 
@@ -40,9 +40,9 @@
                 v-if="getClass(day.key, period.num)"
                 :class="['rounded-lg p-3 text-sm h-full', getClass(day.key, period.num)?.color]"
               >
-                <div class="font-semibold text-gray-800">{{ getClass(day.key, period.num)?.name }}</div>
-                <div class="text-gray-600 text-xs mt-1">{{ getClass(day.key, period.num)?.room }}</div>
-                <div class="text-gray-500 text-xs">{{ getClass(day.key, period.num)?.teacher }}</div>
+                <div class="font-semibold text-base-content">{{ getClass(day.key, period.num)?.name }}</div>
+                <div class="text-base-content/70 text-xs mt-1">{{ getClass(day.key, period.num)?.room }}</div>
+                <div class="text-base-content/50 text-xs">{{ getClass(day.key, period.num)?.teacher }}</div>
               </div>
             </td>
           </tr>

@@ -2,39 +2,53 @@
 const navItems = [
   { href: '/', label: '首页' },
   { href: '/features', label: '功能' },
-  { href: '/changelog', label: '更新日志' },
+  { href: '/updates', label: '更新日志' },
   { href: '/news', label: '新闻' },
   { href: '/download', label: '下载' },
 ];
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <a href="/" class="flex items-center space-x-2 flex-shrink-0">
-        <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-          <span class="text-white font-bold text-sm">ii</span>
-        </div>
-        <span class="font-bold text-xl text-gray-900">iiCourse</span>
-      </a>
-      
-      <!-- Navigation Links -->
-      <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-        {navItems.map(item => (
-          <a 
-            href={item.href}
-            class="text-gray-600 hover:text-primary font-medium transition-colors whitespace-nowrap"
-          >
+<nav class="navbar bg-base-100/80 backdrop-blur-md border-b border-base-300 fixed top-0 left-0 right-0 z-50">
+  <div class="navbar-start">
+    <!-- Logo -->
+    <a href="/" class="btn btn-ghost normal-case text-xl gap-2">
+      <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+        <span class="text-white font-bold text-sm">ii</span>
+      </div>
+      <span class="font-bold text-base-content">iiCourse</span>
+    </a>
+  </div>
+  
+  <div class="navbar-center hidden md:flex">
+    <ul class="menu menu-horizontal px-1 gap-2">
+      {navItems.map(item => (
+        <li>
+          <a href={item.href} class="hover:text-primary transition-colors">
             {item.label}
           </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+  
+  <div class="navbar-end">
+    <!-- 移动端菜单 -->
+    <div class="dropdown dropdown-end md:hidden">
+      <label tabindex="0" class="btn btn-ghost btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </label>
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+        {navItems.map(item => (
+          <li><a href={item.href}>{item.label}</a></li>
         ))}
-      </div>
-      
-      <!-- Download Button -->
-      <a href="/download" class="btn-primary text-sm flex-shrink-0">
-        立即下载
-      </a>
+      </ul>
     </div>
+    
+    <!-- 下载按钮 -->
+    <a href="/download" class="btn btn-primary btn-sm hidden md:flex">
+      立即下载
+    </a>
   </div>
 </nav>

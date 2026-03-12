@@ -4,18 +4,18 @@ import { footerConfig } from '../config/footer.config';
 const { brand, columns, copyright } = footerConfig;
 ---
 
-<footer class="bg-white py-12 mt-auto border-t border-warm-200">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<footer class="footer footer-center md:footer-start bg-base-100 py-12 mt-auto border-t border-base-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <!-- 品牌区域 -->
       <div class="col-span-1 md:col-span-2">
-        <div class="flex items-center space-x-2 mb-4">
+        <div class="flex items-center gap-2 mb-4">
           <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
             <span class="text-white font-bold text-sm">{brand.logoText}</span>
           </div>
-          <span class="font-bold text-xl text-gray-900">{brand.name}</span>
+          <span class="font-bold text-xl text-base-content">{brand.name}</span>
         </div>
-        <p class="text-gray-600 max-w-sm">
+        <p class="text-base-content/70 max-w-sm">
           {brand.tagline}
         </p>
       </div>
@@ -23,11 +23,11 @@ const { brand, columns, copyright } = footerConfig;
       <!-- 链接列 -->
       {columns.map((column) => (
         <div>
-          <h4 class="font-semibold text-gray-900 mb-4">{column.title}</h4>
-          <ul class="space-y-2 text-gray-600">
+          <h4 class="footer-title text-base-content">{column.title}</h4>
+          <ul class="space-y-2">
             {column.links.map((link) => (
               <li>
-                <a href={link.href} class="hover:text-primary transition-colors">
+                <a href={link.href} class="link link-hover text-base-content/70">
                   {link.label}
                 </a>
               </li>
@@ -38,7 +38,7 @@ const { brand, columns, copyright } = footerConfig;
     </div>
 
     <!-- 版权信息 -->
-    <div class="border-t border-warm-200 mt-8 pt-8 text-center text-gray-500 text-sm">
+    <div class="border-t border-base-300 mt-8 pt-8 text-center text-base-content/50 text-sm">
       {copyright}
     </div>
   </div>

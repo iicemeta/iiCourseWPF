@@ -42,7 +42,7 @@ const features = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
         <h1 class="section-title mb-4">功能<span class="gradient-text">演示</span></h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p class="text-xl text-base-content/70 max-w-2xl mx-auto">
           下面是应用的核心功能展示，使用示例数据模拟真实界面
         </p>
       </div>
@@ -50,16 +50,22 @@ const features = [
       <div class="grid md:grid-cols-2 gap-8">
         {features.map(feature => (
           <a href={feature.href} class="group block">
-            <div class="card h-full hover:shadow-2xl transition-all duration-300">
-              <div class={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center 
-                          text-4xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                {feature.icon}
-              </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-              <p class="text-gray-600 text-lg">{feature.description}</p>
-              <div class="mt-6 flex items-center text-primary font-semibold">
-                查看演示
-                <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
+            <div class="card bg-base-100 shadow-xl h-full hover:shadow-2xl transition-all duration-300">
+              <div class="card-body">
+                <div class={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center 
+                            text-4xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  {feature.icon}
+                </div>
+                <h3 class="card-title text-2xl">{feature.title}</h3>
+                <p class="text-base-content/70 text-lg">{feature.description}</p>
+                <div class="card-actions mt-6">
+                  <span class="text-primary font-semibold flex items-center gap-2">
+                    查看演示
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:translate-x-2 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </span>
+                </div>
               </div>
             </div>
           </a>

@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "pagesdeploy": "pnpm run build && wrangler pages deploy ./dist --project-name=iicourse --branch=master"
   },
   "dependencies": {
     "@astrojs/vue": "^6.0.0",
@@ -21,6 +22,7 @@
     "@astrojs/mdx": "^5.0.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.1",
+    "daisyui": "^5.5.19",
     "tailwindcss": "^4.2.1"
   }
 }

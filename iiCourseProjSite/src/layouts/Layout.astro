@@ -10,7 +10,7 @@ const { title, description = "iiCourse - 智慧校园桌面应用" } = Astro.pro
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="iicourse">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,7 +18,7 @@ const { title, description = "iiCourse - 智慧校园桌面应用" } = Astro.pro
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | iiCourse</title>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col bg-base-100">
     <slot />
   </body>
 </html>

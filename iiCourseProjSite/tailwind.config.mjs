@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from 'daisyui';
+
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
@@ -37,5 +39,37 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [daisyui],
+  daisyui: {
+    themes: [
+      {
+        iicourse: {
+          primary: '#FF6B35',
+          'primary-focus': '#E55A2B',
+          'primary-content': '#FFFFFF',
+          secondary: '#FFB347',
+          'secondary-focus': '#F5A030',
+          'secondary-content': '#1F2937',
+          accent: '#2A9D8F',
+          'accent-focus': '#248A7E',
+          'accent-content': '#FFFFFF',
+          neutral: '#5A392C',
+          'neutral-focus': '#4A2F24',
+          'neutral-content': '#FFFFFF',
+          'base-100': '#FDF8F3',
+          'base-200': '#F9F0E8',
+          'base-300': '#F3E0D0',
+          'base-content': '#1F2937',
+          info: '#3ABFF8',
+          success: '#36D399',
+          warning: '#FBBD23',
+          error: '#F87272',
+        }
+      }
+    ],
+    darkTheme: false,
+    base: true,
+    styled: true,
+    utils: true,
+  }
 }

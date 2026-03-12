@@ -16,7 +16,7 @@ const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
       <!-- 页面标题 -->
       <div class="text-center mb-16">
         <h1 class="section-title mb-4">📰 新闻<span class="gradient-text">动态</span></h1>
-        <p class="text-xl text-gray-600">
+        <p class="text-xl text-base-content/70">
           最新资讯、开发日志和使用技巧
         </p>
       </div>
@@ -24,37 +24,37 @@ const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
       <!-- 文章列表 -->
       <div class="space-y-8">
         {sortedPosts.map((post) => (
-          <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-            <a href={`/news/${post.id}`} class="block p-8">
-              <div class="flex items-center space-x-4 mb-4">
-                <span class="text-sm text-gray-500">
-                  {post.data.pubDate.toLocaleDateString('zh-CN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </span>
-                <span class="text-gray-300">·</span>
-                <span class="text-sm text-gray-500">{post.data.author}</span>
-              </div>
-              
-              <h2 class="text-2xl font-bold text-gray-900 mb-3 hover:text-primary transition-colors">
-                {post.data.title}
-              </h2>
-              
-              <p class="text-gray-600 mb-4 line-clamp-2">
-                {post.data.description}
-              </p>
-              
-              {post.data.tags.length > 0 && (
-                <div class="flex flex-wrap gap-2">
-                  {post.data.tags.map((tag) => (
-                    <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
-                      {tag}
-                    </span>
-                  ))}
+          <article class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
+            <a href={`/news/${post.id}`} class="block">
+              <div class="card-body">
+                <div class="flex items-center gap-4 mb-4 text-sm text-base-content/50">
+                  <span>
+                    {post.data.pubDate.toLocaleDateString('zh-CN', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                  <span>·</span>
+                  <span>{post.data.author}</span>
                 </div>
-              )}
+                
+                <h2 class="card-title text-2xl hover:text-primary transition-colors">
+                  {post.data.title}
+                </h2>
+                
+                <p class="text-base-content/70 mb-4 line-clamp-2">
+                  {post.data.description}
+                </p>
+                
+                {post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-2">
+                    {post.data.tags.map((tag) => (
+                      <span class="badge badge-outline">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </a>
           </article>
         ))}

@@ -15,6 +15,10 @@
   --color-warm-700: #855238;
   --color-warm-800: #6D4432;
   --color-warm-900: #5A392C;
+  --color-base-100: #FDF8F3;
+  --color-base-200: #F9F0E8;
+  --color-base-300: #F3E0D0;
+  --color-base-content: #1f2937;
 }
 
 @layer base {
@@ -34,49 +38,11 @@
 }
 
 @layer components {
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    background-color: var(--color-primary);
-    color: white;
-    font-weight: 600;
-    border-radius: 0.75rem;
-    transition: all 0.3s;
-  }
-  .btn-primary:hover {
-    opacity: 0.9;
-    transform: scale(1.05);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    background-color: white;
-    color: var(--color-primary);
-    font-weight: 600;
-    border-radius: 0.75rem;
-    border: 2px solid var(--color-primary);
-    transition: all 0.3s;
-  }
-  .btn-secondary:hover {
-    background-color: var(--color-primary);
-    color: white;
-  }
-
-  .card {
-    background-color: white;
-    border-radius: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    transition: all 0.3s;
-  }
-  .card:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  .gradient-text {
+    background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .section-title {
@@ -91,107 +57,172 @@
     }
   }
 
-  .gradient-text {
-    background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  /* daisyUI 组件样式模拟 */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:opacity-90;
+  }
+  .btn-outline {
+    @apply border-2 border-warm-200 bg-transparent hover:bg-warm-100;
+  }
+  .btn-ghost {
+    @apply bg-transparent hover:bg-warm-100;
+  }
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm;
   }
 
-  /* 文章内容样式 */
-  .article-content {
-    font-size: 1.125rem;
-    line-height: 1.75;
-    color: #374151;
+  .card {
+    @apply bg-white rounded-xl shadow-lg;
+  }
+  .card-body {
+    @apply p-6;
+  }
+  .card-title {
+    @apply font-bold text-gray-900;
   }
 
-  .article-content h1 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: #111827;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+  .navbar {
+    @apply flex items-center justify-between px-4;
+  }
+  .navbar-start {
+    @apply flex items-center;
+  }
+  .navbar-center {
+    @apply hidden md:flex;
+  }
+  .navbar-end {
+    @apply flex items-center gap-2;
   }
 
-  .article-content h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
+  .menu {
+    @apply flex list-none;
+  }
+  .menu-horizontal {
+    @apply flex-row gap-1;
+  }
+  .menu li {
+    @apply list-none;
+  }
+  .menu li a {
+    @apply px-4 py-2 rounded-lg hover:bg-warm-100 transition-colors;
   }
 
-  .article-content h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #111827;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
+  .dropdown {
+    @apply relative;
+  }
+  .dropdown-content {
+    @apply absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg border border-warm-200 z-50 hidden;
+  }
+  .dropdown:focus-within .dropdown-content {
+    @apply block;
   }
 
-  .article-content p {
-    margin-bottom: 1rem;
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-primary {
+    @apply bg-primary text-white;
+  }
+  .badge-success {
+    @apply bg-green-100 text-green-700;
+  }
+  .badge-info {
+    @apply bg-blue-100 text-blue-700;
+  }
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-700;
+  }
+  .badge-error {
+    @apply bg-red-100 text-red-700;
+  }
+  .badge-ghost {
+    @apply bg-warm-100 text-gray-900;
+  }
+  .badge-outline {
+    @apply border border-warm-200 bg-transparent text-gray-700;
+  }
+  .badge-primary.badge-outline {
+    @apply border-primary text-primary bg-transparent;
+  }
+  .badge-lg {
+    @apply px-4 py-2 text-sm;
+  }
+  .badge-sm {
+    @apply px-2 py-0.5 text-xs;
   }
 
-  .article-content ul {
-    list-style-type: disc;
-    list-style-position: inside;
-    margin-bottom: 1rem;
+  .select {
+    @apply px-4 py-2 border border-warm-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary;
   }
-  .article-content ul > li {
-    margin-bottom: 0.25rem;
+  .select-bordered {
+    @apply border-warm-200;
   }
-
-  .article-content ol {
-    list-style-type: decimal;
-    list-style-position: inside;
-    margin-bottom: 1rem;
-  }
-  .article-content ol > li {
-    margin-bottom: 0.25rem;
+  .select-sm {
+    @apply px-3 py-1.5 text-sm;
   }
 
-  .article-content a {
-    color: var(--color-primary);
+  .input {
+    @apply px-4 py-2 border border-warm-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary;
   }
-  .article-content a:hover {
-    text-decoration: underline;
-  }
-
-  .article-content strong {
-    font-weight: 700;
-    color: #111827;
+  .input-bordered {
+    @apply border-warm-200;
   }
 
-  .article-content code {
-    background-color: #f3f4f6;
-    color: var(--color-primary);
-    padding: 0.25rem 0.375rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  .table {
+    @apply w-full text-left;
+  }
+  .table th {
+    @apply font-semibold;
+  }
+  .table-zebra tbody tr:nth-child(even) {
+    @apply bg-warm-50;
   }
 
-  .article-content pre {
-    background-color: #111827;
-    color: #f3f4f4;
-    padding: 1rem;
-    border-radius: 0.75rem;
-    overflow-x: auto;
-    margin-bottom: 1rem;
+  .link {
+    @apply text-primary hover:underline cursor-pointer;
+  }
+  .link-hover:hover {
+    @apply text-primary;
   }
 
-  .article-content pre code {
-    background-color: transparent;
-    color: #f3f4f4;
-    padding: 0;
+  .footer {
+    @apply py-12;
+  }
+  .footer-title {
+    @apply font-semibold mb-4;
   }
 
-  .article-content blockquote {
-    border-left: 4px solid var(--color-primary);
-    padding-left: 1rem;
-    font-style: italic;
-    color: #4b5563;
-    margin-bottom: 1rem;
+  .breadcrumbs {
+    @apply text-sm;
+  }
+  .breadcrumbs ul {
+    @apply flex items-center gap-2 list-none;
+  }
+  .breadcrumbs li:not(:last-child)::after {
+    content: '/';
+    @apply ml-2 text-gray-400;
+  }
+
+  .form-control {
+    @apply flex flex-col gap-1;
+  }
+  .label {
+    @apply flex items-center gap-2;
+  }
+  .label-text {
+    @apply text-sm font-medium text-gray-900;
+  }
+
+  .prose {
+    @apply max-w-none;
+  }
+  .prose-lg {
+    @apply text-lg leading-relaxed;
   }
 }
