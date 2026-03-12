@@ -174,7 +174,7 @@ const filteredClassrooms = computed(() => {
     }
     // 节次筛选
     if (selectedPeriod.value !== 'all') {
-      const period = selectedPeriod.value as number;
+      const period = Number(selectedPeriod.value);
       if (period < room.startPeriod || period > room.endPeriod) {
         return false;
       }
