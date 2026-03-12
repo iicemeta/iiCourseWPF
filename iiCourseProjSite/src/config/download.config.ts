@@ -18,6 +18,24 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface DownloadVersion {
+  id: string;
+  name: string;
+  arch: string;
+  size: string;
+  description: string;
+  recommended?: boolean;
+  requiresDotNet?: boolean;
+  href: string;
+  mirrorHref: string; // 备用下载链接
+}
+
+export interface DownloadCategory {
+  title: string;
+  description: string;
+  versions: DownloadVersion[];
+}
+
 export interface DownloadConfig {
   // 页面标题
   pageTitle: string;
@@ -27,11 +45,18 @@ export interface DownloadConfig {
   currentVersion: string;
   releaseDate: string;
 
+  // GitHub 仓库信息
+  githubRepo: string;
+
+  // 下载分类
+  downloadCategories: DownloadCategory[];
+
   // 下载按钮
   downloadButton: {
     text: string;
     icon: string;
     href: string;
+    mirrorHref: string;
   };
   changelogButton: {
     text: string;
@@ -54,17 +79,141 @@ export interface DownloadConfig {
   faqItems: FAQItem[];
 }
 
+// ============================================
+// 版本更新指南：
+// 1. 修改下面的 VERSION 常量
+// 2. 修改 releaseDate 发布日期
+// 3. 所有下载链接会自动更新
+// ============================================
+
+// 生成 GitHub Release 下载链接
+const getReleaseUrl = (version: string, filename: string) => {
+  return `https://github.com/iicemeta/iiCourseWPF/releases/download/v${version}/${filename}`;
+};
+
+// 生成备用下载链接（中国大陆网络异常时使用）
+const getMirrorUrl = (version: string, filename: string) => {
+  const originalUrl = getReleaseUrl(version, filename);
+  return `https://proxy.api.030101.xyz/${originalUrl.replace('https://', '')}`;
+};
+
+// 在这里修改版本号
+const VERSION = "1.7.200";
+const REPO = "iicemeta/iiCourseWPF";
+
 export const downloadConfig: DownloadConfig = {
   pageTitle: "下载应用",
   pageSubtitle: "免费下载 iiCourse，让教务管理更简单",
 
-  currentVersion: "1.7.200",
-  releaseDate: "2026-03-11",
+  currentVersion: VERSION,
+  releaseDate: "2026-03-12", // 在这里修改发布日期
+
+  githubRepo: REPO,
+
+  // 多版本下载配置，与 release.yml 保持一致
+  downloadCategories: [
+    {
+      title: "自包含版本（推荐）",
+      description: "无需安装 .NET 9 运行时，下载即用",
+      versions: [
+        {
+          id: "x64-self-contained",
+          name: "64位",
+          arch: "x64",
+          size: "~50MB",
+          description: "大多数用户推荐，64位 Windows",
+          recommended: true,
+          requiresDotNet: false,
+          href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x64-self-contained.zip`),
+          mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x64-self-contained.zip`)
+        },
+        {
+          id: "x86-self-contained",
+          name: "32位",
+          arch: "x86",
+          size: "~45MB",
+          description: "32位 Windows 系统",
+          recommended: false,
+          requiresDotNet: false,
+          href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x86-self-contained.zip`),
+          mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x86-self-contained.zip`)
+        },
+        {
+          id: "arm64-self-contained",
+          name: "ARM64",
+          arch: "arm64",
+          size: "~45MB",
+          description: "Surface Pro X、Copilot+ PC 等 ARM 设备",
+          recommended: false,
+          requiresDotNet: false,
+          href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-win-arm64-self-contained.zip`),
+          mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-win-arm64-self-contained.zip`)
+        }
+      ]
+    },
+    {
+      title: "框架依赖版本",
+      description: "体积较小，需先安装 .NET 9 运行时",
+      versions: [
+        {
+          id: "x64-framework",
+          name: "64位",
+          arch: "x64",
+          size: "~5MB",
+          description: "已安装 .NET 9 的 64位系统",
+          recommended: false,
+          requiresDotNet: true,
+          href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x64-framework.zip`),
+          mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x64-framework.zip`)
+        },
+        {
+          id: "x86-framework",
+          name: "32位",
+          arch: "x86",
+          size: "~4MB",
+          description: "已安装 .NET 9 的 32位系统",
+          recommended: false,
+          requiresDotNet: true,
+          href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x86-framework.zip`),
+          mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x86-framework.zip`)
+        },
+        {
+          id: "arm64-framework",
+          name: "ARM64",
+          arch: "arm64",
+          size: "~4MB",
+          description: "已安装 .NET 9 的 ARM 设备",
+          recommended: false,
+          requiresDotNet: true,
+          href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-win-arm64-framework.zip`),
+          mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-win-arm64-framework.zip`)
+        }
+      ]
+    },
+    {
+      title: "纯框架依赖版本",
+      description: "体积最小，仅适合开发者或磁盘空间极紧张的用户",
+      versions: [
+        {
+          id: "dotnet9-required",
+          name: "纯框架依赖",
+          arch: "any",
+          size: "~200KB",
+          description: "开发者或磁盘空间极紧张",
+          recommended: false,
+          requiresDotNet: true,
+          href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-dotnet9-required.zip`),
+          mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-dotnet9-required.zip`)
+        }
+      ]
+    }
+  ],
 
   downloadButton: {
-    text: "下载 Windows 版",
+    text: "下载 64位自包含版",
     icon: "🪟",
-    href: "#"
+    href: getReleaseUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x64-self-contained.zip`),
+    mirrorHref: getMirrorUrl(VERSION, `iiCourseWPF-v${VERSION}-win-x64-self-contained.zip`)
   },
   changelogButton: {
     text: "查看更新日志",
@@ -75,18 +224,18 @@ export const downloadConfig: DownloadConfig = {
 
   systemRequirementsTitle: "系统要求",
   systemRequirements: [
-    { icon: "🪟", title: "操作系统", desc: "Windows 10/11 (64位)" },
-    { icon: "💻", title: "运行环境", desc: ".NET 9 Runtime" },
-    { icon: "📦", title: "安装包大小", desc: "约 26 MB" },
+    { icon: "🪟", title: "操作系统", desc: "Windows 10 1809+ / Windows 11" },
+    { icon: "💻", title: "运行环境", desc: "自包含版无需 .NET 9" },
+    { icon: "📦", title: "安装包大小", desc: "45MB - 50MB" },
     { icon: "🔌", title: "网络", desc: "需要校园网或 VPN" }
   ],
 
   installStepsTitle: "安装步骤",
   installSteps: [
-    { step: 1, title: "下载安装包", desc: "点击上方按钮下载最新版本" },
-    { step: 2, title: "运行安装程序", desc: "双击下载的 .exe 文件" },
-    { step: 3, title: "完成安装", desc: "按照向导完成安装" },
-    { step: 4, title: "开始使用", desc: "打开应用，使用学号登录" }
+    { step: 1, title: "下载安装包", desc: "选择上方对应版本下载" },
+    { step: 2, title: "解压文件", desc: "将 zip 文件解压到任意文件夹" },
+    { step: 3, title: "运行应用", desc: "双击 iiCourseWPF.exe 启动" },
+    { step: 4, title: "开始使用", desc: "使用学号登录，开始查课表" }
   ],
 
   faqTitle: "常见问题",
@@ -106,6 +255,14 @@ export const downloadConfig: DownloadConfig = {
     {
       question: "如何更新？",
       answer: "应用会自动检查更新，也可以在设置中手动检查。更新时会保留所有配置。"
+    },
+    {
+      question: "该选哪个版本？",
+      answer: "不确定就选「自包含 64位」。它最大但最省心，无需安装任何运行环境。"
+    },
+    {
+      question: "ARM64 是什么？",
+      answer: "ARM64 是 ARM 架构的 64位版本，用于 Surface Pro X、新款 Copilot+ PC 等设备。"
     }
   ]
 };
