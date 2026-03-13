@@ -1,83 +1,155 @@
+using System.IO;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
+using System.Windows.Input;
 using iiCourse.Core.ViewModels;
-using iiCourseWPF.Views;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.Wpf;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace iiCourseWPF
 {
     /// <summary>
-    /// 主窗口 - 纯UI层，负责视图切换和动画
+    /// 主窗口 - WebView2 宿主，负责加载 Web UI 并处理与 C# 后端的通信
     /// </summary>
     public partial class MainWindow : Window
     {
         private MainViewModel? _viewModel;
-        private UserControl? _currentView;
+        private WebView2? _webView;
 
         public MainWindow()
         {
             InitializeComponent();
-            InitializeViewModel();
-            InitializeEventHandlers();
+            _webView = WebView;
+            InitializeWebView();
         }
 
         /// <summary>
-        /// 初始化ViewModel
+        /// 初始化 WebView2
+        /// </summary>
+        private async void InitializeWebView()
+        {
+            if (_webView == null) return;
+
+            try
+            {
+                // 确保 WebView2 运行时已安装
+                var env = await CoreWebView2Environment.CreateAsync();
+                await _webView.EnsureCoreWebView2Async(env);
+
+                // 配置 WebView2 设置
+                _webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+                _webView.CoreWebView2.Settings.AreDevToolsEnabled = true;
+                _webView.CoreWebView2.Settings.IsStatusBarEnabled = false;
+                _webView.CoreWebView2.Settings.IsZoomControlEnabled = false;
+
+                // 添加消息接收器，处理前端发来的消息
+                _webView.CoreWebView2.WebMessageReceived += OnWebMessageReceived;
+
+                // 添加导航完成事件，用于调试
+                _webView.CoreWebView2.NavigationCompleted += (s, e) =>
+                {
+                    System.Diagnostics.Debug.WriteLine($"导航完成: {_webView.Source}");
+                    System.Diagnostics.Debug.WriteLine($"导航结果: {e.WebErrorStatus}");
+
+                    // 注入脚本捕获控制台错误
+                    _webView.CoreWebView2.ExecuteScriptAsync(@"
+                        (function() {
+                            const originalError = console.error;
+                            console.error = function(...args) {
+                                window.chrome.webview.postMessage({type: 'console', level: 'error', message: args.join(' ')});
+                                originalError.apply(console, args);
+                            };
+                            const originalLog = console.log;
+                            console.log = function(...args) {
+                                window.chrome.webview.postMessage({type: 'console', level: 'log', message: args.join(' ')});
+                                originalLog.apply(console, args);
+                            };
+                        })();
+                    ");
+                };
+
+                // 导航到本地 Web UI
+                var exeLocation = Assembly.GetExecutingAssembly().Location;
+                var exeDir = Path.GetDirectoryName(exeLocation) ?? "";
+                var webUiPath = Path.Combine(exeDir, "WebUI", "index.html");
+
+                System.Diagnostics.Debug.WriteLine($"EXE 位置: {exeLocation}");
+                System.Diagnostics.Debug.WriteLine($"EXE 目录: {exeDir}");
+                System.Diagnostics.Debug.WriteLine($"WebUI 路径: {webUiPath}");
+                System.Diagnostics.Debug.WriteLine($"文件是否存在: {File.Exists(webUiPath)}");
+
+                if (File.Exists(webUiPath))
+                {
+                    var webUiFolder = Path.Combine(exeDir, "WebUI");
+
+                    // 使用 SetVirtualHostNameToFolderMapping 将本地文件夹映射到虚拟域名
+                    // 这样可以使用 https://app.local/ 访问本地文件，避免 file:// 的 CORS 问题
+                    _webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
+                        "app.local",
+                        webUiFolder,
+                        CoreWebView2HostResourceAccessKind.Allow);
+
+                    System.Diagnostics.Debug.WriteLine($"虚拟主机映射: app.local -> {webUiFolder}");
+                    System.Diagnostics.Debug.WriteLine($"导航到: https://app.local/index.html");
+
+                    // 导航到虚拟域名
+                    _webView.Source = new Uri("https://app.local/index.html");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("WebUI 文件不存在，使用备用 HTML");
+                    // 如果本地文件不存在，加载内嵌的 HTML
+                    _webView.NavigateToString(GetFallbackHtml());
+                }
+
+                // 初始化 ViewModel
+                InitializeViewModel();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"初始化 WebView2 失败: {ex}");
+                MessageBox.Show($"初始化失败: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// 初始化 ViewModel
         /// </summary>
         private void InitializeViewModel()
         {
             _viewModel = new MainViewModel();
             DataContext = _viewModel;
 
-            // 绑定ViewModel到各个视图
-            LoginView.ViewModel = _viewModel.LoginViewModel;
-            UserInfoView.ViewModel = _viewModel.UserInfoViewModel;
-            ClassScheduleView.ViewModel = _viewModel.ClassScheduleViewModel;
-            ScoreView.ViewModel = _viewModel.ScoreViewModel;
-            SpareClassroomView.ViewModel = _viewModel.SpareClassroomViewModel;
-            EvaluationView.ViewModel = _viewModel.EvaluationViewModel;
-
-            // 初始显示登录视图
-            _ = ShowLoginView();
-        }
-
-        /// <summary>
-        /// 初始化事件处理器
-        /// </summary>
-        private void InitializeEventHandlers()
-        {
-            // 监听ViewModel的CurrentView属性变化
-            if (_viewModel != null)
+            // 监听 ViewModel 属性变化，同步到前端
+            _viewModel.PropertyChanged += (s, e) =>
             {
-                _viewModel.PropertyChanged += (s, e) =>
+                switch (e.PropertyName)
                 {
-                    if (e.PropertyName == nameof(MainViewModel.CurrentView))
-                    {
-                        _ = OnCurrentViewChanged(_viewModel.CurrentView);
-                    }
-                    if (e.PropertyName == nameof(MainViewModel.IsLoggedIn) ||
-                        e.PropertyName == nameof(MainViewModel.CurrentName) ||
-                        e.PropertyName == nameof(MainViewModel.CurrentStudentId))
-                    {
-                        Sidebar.UpdateLoginStatus(
-                            _viewModel.IsLoggedIn,
-                            _viewModel.CurrentName ?? "",
-                            _viewModel.CurrentStudentId ?? "");
-                    }
-                };
-            }
-
-            // 侧边栏菜单点击事件
-            Sidebar.MenuClicked += (menuTag) =>
-            {
-                _viewModel?.NavigateCommand.Execute(menuTag);
+                    case nameof(MainViewModel.CurrentView):
+                        SendMessageToWeb("navigate", _viewModel.CurrentView);
+                        break;
+                    case nameof(MainViewModel.IsLoggedIn):
+                        SendMessageToWeb("loginStatus", new { isLoggedIn = _viewModel.IsLoggedIn });
+                        break;
+                    case nameof(MainViewModel.CurrentName):
+                    case nameof(MainViewModel.CurrentStudentId):
+                        SendMessageToWeb("userInfo", new
+                        {
+                            name = _viewModel.CurrentName,
+                            studentId = _viewModel.CurrentStudentId
+                        });
+                        break;
+                }
             };
 
-            // 登录完成事件
-            if (_viewModel?.LoginViewModel != null)
+            // 监听登录完成事件
+            if (_viewModel.LoginViewModel != null)
             {
                 _viewModel.LoginViewModel.LoginCompleted += (success, username) =>
                 {
+                    SendMessageToWeb("loginCompleted", new { success, username });
                     if (!success)
                     {
                         MessageBox.Show(
@@ -91,85 +163,173 @@ namespace iiCourseWPF
         }
 
         /// <summary>
-        /// 当前视图变更处理
+        /// 接收来自 Web 前端的消息
         /// </summary>
-        private async Task OnCurrentViewChanged(string viewName)
+        private void OnWebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
-            UserControl? targetView = viewName switch
+            try
             {
-                "Login" => LoginView,
-                "UserInfo" => UserInfoView,
-                "ClassSchedule" => ClassScheduleView,
-                "Score" => ScoreView,
-                "SpareClassroom" => SpareClassroomView,
-                "Evaluation" => EvaluationView,
-                "Settings" => SettingsView,
-                "Privacy" => PrivacyView,
-                _ => null
+                var message = JsonConvert.DeserializeObject<WebMessage>(e.WebMessageAsJson);
+                if (message == null) return;
+
+                switch (message.Type)
+                {
+                    case "navigate":
+                        _viewModel?.NavigateCommand.Execute(message.Data?.ToString());
+                        break;
+                    case "login":
+                        try
+                        {
+                            // 将登录数据反序列化为强类型对象
+                            var loginData = message.Data is JObject jObj 
+                                ? jObj.ToObject<LoginData>() 
+                                : JsonConvert.DeserializeObject<LoginData>(message.Data?.ToString() ?? "");
+                            
+                            if (loginData != null && _viewModel?.LoginViewModel != null)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"收到登录请求: Username={loginData.Username}");
+                                _viewModel.LoginViewModel.Username = loginData.Username ?? "";
+                                _viewModel.LoginViewModel.Password = loginData.Password ?? "";
+                                _viewModel.LoginViewModel.LoginCommand.Execute(null);
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"登录数据解析失败: Data={message.Data}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"登录消息处理异常: {ex.Message}");
+                        }
+                        break;
+                    case "requestData":
+                        HandleDataRequest(message.Data?.ToString() ?? "");
+                        break;
+                    case "window":
+                        HandleWindowCommand(message.Data?.ToString() ?? "");
+                        break;
+                    case "console":
+                        // 处理前端控制台消息
+                        if (message.Data is JObject consoleData)
+                        {
+                            var level = consoleData["level"]?.ToString();
+                            var msg = consoleData["message"]?.ToString();
+                            System.Diagnostics.Debug.WriteLine($"[Web {level?.ToUpper()}] {msg}");
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"消息处理错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 处理数据请求
+        /// </summary>
+        private void HandleDataRequest(string dataType)
+        {
+            switch (dataType)
+            {
+                case "schedule":
+                    // 发送课表数据
+                    SendMessageToWeb("scheduleData", _viewModel?.ClassScheduleViewModel?.Classes);
+                    break;
+                case "scores":
+                    // 发送成绩数据
+                    SendMessageToWeb("scoresData", _viewModel?.ScoreViewModel?.Scores);
+                    break;
+                case "userInfo":
+                    // 发送用户信息
+                    SendMessageToWeb("userInfoData", _viewModel?.UserInfoViewModel);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 处理窗口命令
+        /// </summary>
+        private void HandleWindowCommand(string command)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                switch (command)
+                {
+                    case "minimize":
+                        WindowState = WindowState.Minimized;
+                        break;
+                    case "maximize":
+                        WindowState = WindowState == WindowState.Maximized 
+                            ? WindowState.Normal 
+                            : WindowState.Maximized;
+                        break;
+                    case "close":
+                        Close();
+                        break;
+                }
+            });
+        }
+
+        /// <summary>
+        /// 发送消息到 Web 前端
+        /// </summary>
+        private void SendMessageToWeb(string type, object? data)
+        {
+            if (_webView?.CoreWebView2 == null) return;
+
+            var message = new WebMessage
+            {
+                Type = type,
+                Data = data
             };
 
-            if (targetView != null)
-            {
-                // 先立即更新侧边栏选中状态，提供即时反馈
-                Sidebar.SetActiveMenu(viewName);
-                await ShowViewAsync(targetView);
-            }
+            var json = JsonConvert.SerializeObject(message);
+            _webView.CoreWebView2.PostWebMessageAsJson(json);
         }
 
         /// <summary>
-        /// 显示登录视图
+        /// 获取备用 HTML（当本地文件不存在时）
         /// </summary>
-        private async Task ShowLoginView()
+        private string GetFallbackHtml()
         {
-            await ShowViewAsync(LoginView);
-            Sidebar.SetActiveMenu("UserInfo");
+            return @"<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>iiCourse</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
-
-        /// <summary>
-        /// 显示指定视图（带动画）
-        /// </summary>
-        private async Task ShowViewAsync(UserControl viewToShow)
-        {
-            if (_currentView != null && _currentView != viewToShow)
-            {
-                await AnimateViewExitAsync(_currentView);
-                _currentView.Visibility = Visibility.Collapsed;
-            }
-
-            viewToShow.Visibility = Visibility.Visible;
-            _currentView = viewToShow;
-
-            await AnimateViewEnterAsync(viewToShow);
+        .loading { text-align: center; }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #ff6b35;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
-
-        /// <summary>
-        /// 播放视图进入动画
-        /// </summary>
-        private Task AnimateViewEnterAsync(UserControl view)
-        {
-            var tcs = new TaskCompletionSource<object>();
-
-            var storyboard = (Storyboard)FindResource("PageEnterAnimation");
-            storyboard = storyboard.Clone();
-            storyboard.Completed += (s, e) => tcs.SetResult(null!);
-            storyboard.Begin(view);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// 播放视图退出动画
-        /// </summary>
-        private Task AnimateViewExitAsync(UserControl view)
-        {
-            var tcs = new TaskCompletionSource<object>();
-
-            var storyboard = (Storyboard)FindResource("PageExitAnimation");
-            storyboard = storyboard.Clone();
-            storyboard.Completed += (s, e) => tcs.SetResult(null!);
-            storyboard.Begin(view);
-
-            return tcs.Task;
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class='loading'>
+        <div class='spinner'></div>
+        <p>正在加载 iiCourse...</p>
+        <p style='color: #888; font-size: 14px;'>请确保 WebUI 文件已正确部署</p>
+    </div>
+</body>
+</html>";
         }
 
         /// <summary>
@@ -178,7 +338,26 @@ namespace iiCourseWPF
         protected override void OnClosed(EventArgs e)
         {
             _viewModel?.Dispose();
+            _webView?.Dispose();
             base.OnClosed(e);
         }
+    }
+
+    /// <summary>
+    /// Web 消息结构
+    /// </summary>
+    public class WebMessage
+    {
+        public string Type { get; set; } = "";
+        public object? Data { get; set; }
+    }
+
+    /// <summary>
+    /// 登录数据
+    /// </summary>
+    public class LoginData
+    {
+        public string Username { get; set; } = "";
+        public string Password { get; set; } = "";
     }
 }

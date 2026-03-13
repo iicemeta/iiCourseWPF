@@ -1,7 +1,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace iiCourse.Core.Services
 {
@@ -44,7 +44,7 @@ namespace iiCourse.Core.Services
                 };
 
                 // 序列化为 JSON
-                var json = JsonSerializer.Serialize(credential);
+                var json = JsonConvert.SerializeObject(credential);
 
                 // 使用 DPAPI 加密
                 var plainBytes = Encoding.UTF8.GetBytes(json);
@@ -79,7 +79,7 @@ namespace iiCourse.Core.Services
                 var json = Encoding.UTF8.GetString(plainBytes);
 
                 // 反序列化
-                return JsonSerializer.Deserialize<CredentialData>(json);
+                return JsonConvert.DeserializeObject<CredentialData>(json);
             }
             catch (Exception ex)
             {

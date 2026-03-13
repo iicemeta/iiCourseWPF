@@ -4,83 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:iiCourseWPF"
-        xmlns:controls="clr-namespace:iiCourseWPF.Controls"
-        xmlns:views="clr-namespace:iiCourseWPF.Views"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="iiCourse" 
         MinHeight="600" MinWidth="900"
         Height="700" Width="1200" 
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BackgroundColor}"
+        Background="#1a1a2e"
         Icon="Resources/iiCourse.ico">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="200" MaxWidth="280"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <!-- 侧边栏 -->
-        <controls:Sidebar x:Name="Sidebar" Grid.Column="0"/>
-
-        <!-- 内容区域 -->
-        <Border Grid.Column="1" Background="{StaticResource BackgroundColor}">
-            <Grid x:Name="ContentGrid">
-                <!-- 登录视图 -->
-                <views:LoginView x:Name="LoginView" Visibility="Collapsed" Opacity="0">
-                    <views:LoginView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:LoginView.RenderTransform>
-                </views:LoginView>
-                
-                <!-- 用户信息视图 -->
-                <views:UserInfoView x:Name="UserInfoView" Visibility="Collapsed" Opacity="0">
-                    <views:UserInfoView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:UserInfoView.RenderTransform>
-                </views:UserInfoView>
-                
-                <!-- 课程表视图 -->
-                <views:ClassScheduleView x:Name="ClassScheduleView" Visibility="Collapsed" Opacity="0">
-                    <views:ClassScheduleView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:ClassScheduleView.RenderTransform>
-                </views:ClassScheduleView>
-                
-                <!-- 成绩查询视图 -->
-                <views:ScoreView x:Name="ScoreView" Visibility="Collapsed" Opacity="0">
-                    <views:ScoreView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:ScoreView.RenderTransform>
-                </views:ScoreView>
-                
-                <!-- 空教室查询视图 -->
-                <views:SpareClassroomView x:Name="SpareClassroomView" Visibility="Collapsed" Opacity="0">
-                    <views:SpareClassroomView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:SpareClassroomView.RenderTransform>
-                </views:SpareClassroomView>
-
-                <!-- 评教视图 -->
-                <views:EvaluationView x:Name="EvaluationView" Visibility="Collapsed" Opacity="0">
-                    <views:EvaluationView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:EvaluationView.RenderTransform>
-                </views:EvaluationView>
-                
-                <!-- 设置视图 -->
-                <views:SettingsView x:Name="SettingsView" Visibility="Collapsed" Opacity="0">
-                    <views:SettingsView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:SettingsView.RenderTransform>
-                </views:SettingsView>
-                
-                <!-- 隐私政策视图 -->
-                <views:PrivacyView x:Name="PrivacyView" Visibility="Collapsed" Opacity="0">
-                    <views:PrivacyView.RenderTransform>
-                        <TranslateTransform Y="20"/>
-                    </views:PrivacyView.RenderTransform>
-                </views:PrivacyView>
-            </Grid>
-        </Border>
+        <wv2:WebView2 x:Name="WebView" 
+                      DefaultBackgroundColor="#1a1a2e"/>
     </Grid>
 </Window>
